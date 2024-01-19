@@ -10,11 +10,12 @@ editor: visual
 1.  I would like to clean up the data on specific excel sheets and validate that it meets the requirements for analysis.
 2.  I would like to analyse the data and build models that can be used to provide insights to the WASH related issues.
 3.  I would like to visualize the data and report it to the decision makers in charge.
-4.  I would like to manage the data, store it well and ensure it's accessiblity to stakeholders and researchers.
+4.  I would like to manage the data, store it well and ensure it's accessibility to stakeholders and researchers.
 
 **Import**
 
 ```{r}
+library(jmpwashdata)
 library(tidyverse)
 read_excel(here::here("data/raw/JMP_2023_UGA_Uganda.xlsx"))
 ```
