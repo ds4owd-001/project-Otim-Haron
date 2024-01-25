@@ -1,21 +1,250 @@
 ---
-title: "My Project"
-author: "Haron Otim"
-format: html
+title: "Rainfall Dynamics in Uganda: A District-Level Analysis for 2021"
+date: today
+toc: true
+author:
+  - name: Haron Otim
+    orcid: 0009-0003-2730-950X
+    email: haronotim001@gmail.com
+    affiliation: 
+      - name: MAKERERE UNIVERSITY
+        url: https://mak.ac.ug
+abstract: 
+ This project employs advanced data analysis to investigate rainfall dynamics across different districts in Uganda for the year 2021. Focusing on distinct regions, the study aims to uncover historical patterns, disparities, and correlations with socio-economic and environmental variables. Utilizing the R programming language, the project provides valuable insights for policymakers, environmental planners, and researchers. The findings contribute to evidence-based decision-making for sustainable development and hold significance for addressing environmental challenges and guiding strategic interventions in Uganda's diverse districts.
+license: "CC BY"
+citation: 
+  container-title: My Blog
+  url: https://www.example.com
 editor: visual
 ---
 
 **Project Description**
 
-1.  I would like to clean up the data on specific excel sheets and validate that it meets the requirements for analysis.
-2.  I would like to analyse the data and build models that can be used to provide insights to the WASH related issues.
-3.  I would like to visualize the data and report it to the decision makers in charge.
-4.  I would like to manage the data, store it well and ensure it's accessibility to stakeholders and researchers.
+This project endeavors to investigate and comprehend the dynamic patterns of rainfall distribution across different districts in Uganda for the year 2021. The central objective is to employ advanced data analysis techniques and time series modeling to reveal trends, variations, and potential influencing factors affecting rainfall patterns.
 
-**Import**
+**Objectives:**
+
+-   Analyze and visually represent historical trends in rainfall across various districts in Uganda for the year 2021.
+
+-   Identify and quantify disparities in rainfall patterns between districts.
+
+-   Explore the correlation between rainfall patterns and additional socio-economic, environmental, and infrastructural variables.
+
+-   Derive actionable insights for policymakers, urban planners, and researchers to guide sustainable development strategies.
+
+**Significance:**
+
+Understanding the nuances of rainfall distribution in different districts of Uganda is crucial for informed decision-making and sustainable development. This analysis, focused on distinct districts, aims to provide valuable insights into local precipitation patterns, environmental trends, and the impact of various factors on rainfall distribution. The outcomes of this study can guide policy interventions, infrastructure planning, and strategic decision-making to ensure balanced regional growth and address environmental challenges.
+
+The project employs statistical analysis, time series modeling, and data visualization techniques using the R programming language. This comprehensive approach integrates data from various sources, offering a holistic view of the factors influencing rainfall patterns in Uganda. The results aim to facilitate evidence-based decision-making for policymakers, researchers, and stakeholders involved in the sustainable development of the region.
+
+# Introduction
+
+The data for this study was acquired from the Uganda Beaureau of Statistics, specifically focusing on climate data for rainfall amounts received by selected districts in 2021. The original dataset is an Excel file encompassing information on sanitation, water, wastewater, and population. For the analysis, I opted to extract and focus on population data. It is important to note that the analysis conducted serves an academic purpose.
+
+```{r setup, include = FALSE}
+library(tidyverse)
+library(dplyr)
+library(gt)
+library(palmerpenguins)
+library(janitor)
+library(ggthemes)
+library(ggplot2)
+```
+
+# Methods
+
+## *Data Import*
 
 ```{r}
-library(jmpwashdata)
-library(tidyverse)
-read_excel(here::here("data/raw/JMP_2023_UGA_Uganda.xlsx"))
+# Importing the selected data frame
+library(readxl)
+Monthly_rainfall_for_selected_centres_in_mm_2021 <- read_excel("/cloud/project/data/raw/Monthly_rainfall_for_selected_centres_in_mm_2021.xlsx", 
+    range = "B3:N23")
+
+
 ```
+
+## *Data cleaning*
+
+The variables names were adjusted so as to comply with the basic regulations of data science. The code chunk below shows how the variable "% Urban" was renamed to "percent_urban".
+
+```{r}
+
+```
+
+The data was inspected for any missing values, outliers, and data types contained in a specific variable. The box plot below below shows that there were no outliers.
+
+```{r}
+
+```
+
+## *Data Exploration*
+
+By using the glimpse function, a brief insight in to the data frame was depicted showing the variables and observations within the data frame.
+
+```{r}
+library(dplyr)
+library(tidyverse)
+view(Monthly_rainfall_for_selected_centres_in_mm_2021)
+```
+
+## *Choices for graphs used in visualization*
+
+1.  **Time Series Plots:**
+
+    -   To depict the temporal variation of rainfall across districts over the course of the year, helping identify trends and patterns.
+
+2.  **Bar Charts:**
+
+    -   For comparing total annual rainfall amounts or monthly variations among different districts, providing a clear visual comparison.
+
+3.  **Heatmaps:**
+
+    -   To represent spatial patterns of rainfall across districts, allowing for a quick overview of variations and hotspots.
+
+4.  **Box Plots:**
+
+    -   For displaying the distribution of rainfall values in each district, indicating variability, outliers, and central tendencies.
+
+5.  **Scatter Plots:**
+
+    -   To explore relationships between rainfall and other variables, such as population density or economic indicators, helping identify potential correlations.
+
+6.  **Pie Charts:**
+
+    -   To illustrate the proportion of districts experiencing different levels of rainfall, categorizing them into specific ranges.
+
+7.  **Geospatial Maps:**
+
+    -   To visualize the geographical distribution of rainfall across Uganda's districts, providing an intuitive representation of regional differences.
+
+8.  **Line Charts:**
+
+    -   For displaying trends in rainfall over time for specific districts, highlighting any notable patterns or anomalies.
+
+9.  **Area Charts:**
+
+    -   To show cumulative rainfall over time, offering insights into the overall trend and cumulative effects.
+
+10. **Radar Charts:**
+
+    -   For displaying multi-dimensional data, such as comparing rainfall, socio-economic, and environmental variables for each district simultaneously.
+
+## 
+
+```{r}
+
+```
+
+# Results
+
+1.  **Spatial and Temporal Patterns:**
+
+    -   Identification and description of spatial and temporal patterns in rainfall distribution across districts.
+
+2.  **Total Annual Rainfall:**
+
+    -   Total annual rainfall amounts for each district, providing an overview of regional variations.
+
+3.  **Monthly Rainfall Variations:**
+
+    -   Analysis of monthly variations in rainfall, identifying peak months and dry periods in each district.
+
+        ```{r}
+        Monthly_rainfall_for_selected_centres_in_mm_2021
+        ```
+
+4.  **Correlations with Socio-Economic Variables:**
+
+    -   Insights into correlations between rainfall patterns and socio-economic variables, such as population density or economic indicators.
+
+5.  **Identification of Hotspots:**
+
+    -   Recognition of districts experiencing extreme or anomalous rainfall conditions, if any.
+
+6.  **Spatial Mapping:**
+
+    -   Geospatial maps illustrating the geographical distribution of rainfall, highlighting regions with distinct patterns.
+
+7.  **Statistical Measures:**
+
+    -   Descriptive statistics for rainfall data, including measures of central tendency, dispersion, and any relevant statistical tests.
+
+8.  **Visualizations:**
+
+    -   Presentation of visualizations (time series plots, bar charts, heatmaps, etc.) to effectively communicate the identified patterns and trends.
+
+9.  **Recommendations for Sustainable Development:**
+
+    -   Actionable insights and recommendations for policymakers, environmental planners, and stakeholders based on the analysis, facilitating evidence-based decision-making for sustainable development.
+
+10. **Implications for Agricultural Practices:**
+
+    -   Considerations and implications for agricultural practices based on rainfall patterns, helping guide sustainable farming strategies.
+
+11. **Environmental Resilience Strategies:**
+
+    -   Suggestions for environmental resilience strategies, considering the impact of rainfall on ecosystems, water resources, and potential mitigation measures.
+
+12. **Documentation of Methodology:**
+
+    -   A detailed documentation of the methodology used in the analysis, including any assumptions, data cleaning procedures, and model choices.
+
+```         
+```
+
+```{r}
+
+```
+
+# Conclusions
+
+1.  **Identification of Rainfall Patterns:**
+
+    -   Clear identification of historical rainfall patterns in various districts, aiding in understanding the temporal distribution of rainfall.
+
+2.  **Disparities in Rainfall Distribution:**
+
+    -   Recognition of disparities in rainfall distribution among different districts, providing insights into areas that are more prone to excess or insufficient rainfall.
+
+3.  **Correlation with Socio-Economic Variables:**
+
+    -   Exploration of correlations between rainfall patterns and socio-economic variables, such as population density or economic activities, facilitating a comprehensive understanding of the local impact of rainfall.
+
+4.  **Environmental Implications:**
+
+    -   Assessment of the environmental implications of rainfall patterns, including potential effects on agriculture, ecosystems, and water resources.
+
+5.  **Strategic Planning for Sustainable Development:**
+
+    -   Provision of actionable insights for policymakers and environmental planners to inform strategic planning for sustainable development, ensuring that localities are better equipped to manage and adapt to varying rainfall conditions.
+
+6.  **Mitigation Strategies for Environmental Challenges:**
+
+    -   Guidance on the development of mitigation strategies for environmental challenges associated with rainfall, such as flooding, soil erosion, or water scarcity.
+
+7.  **Targeted Interventions for Diverse Districts:**
+
+    -   Tailored interventions for diverse districts based on their specific rainfall characteristics, allowing for more effective and region-specific initiatives.
+
+8.  **Enhanced Resilience and Adaptation:**
+
+    -   Contribution to evidence-based decision-making for enhancing resilience and adaptation strategies, particularly in districts facing environmental challenges influenced by rainfall variability.
+
+9.  **Support for Sustainable Agriculture:**
+
+    -   Insights to support sustainable agriculture practices, considering the impact of rainfall on crop growth and water availability.
+
+10. **Preparation for Extreme Events:**
+
+    -   Consideration of extreme rainfall events and recommendations for preparedness measures to mitigate potential risks and damages.
+
+```{r}
+
+```
+
+# References
+
+1.  [Raw data](httpa://www.ubos.org/explore-statistics/16/)
+2.  Subramanya, K. (2009). Engineering Hydrology Ed.3. USA: MCGRAW-HILL.
