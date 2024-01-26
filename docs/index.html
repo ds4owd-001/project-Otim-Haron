@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Haron Otim">
-<meta name="dcterms.date" content="2024-01-25">
+<meta name="dcterms.date" content="2024-01-26">
 
 <title>Rainfall Dynamics in Uganda: A District-Level Analysis for 2021</title>
 <style>
@@ -86,6 +86,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
   <li><a href="#data-import" id="toc-data-import" class="nav-link" data-scroll-target="#data-import"><em>Data Import</em></a></li>
   <li><a href="#data-cleaning" id="toc-data-cleaning" class="nav-link" data-scroll-target="#data-cleaning"><em>Data cleaning</em></a></li>
+  <li><a href="#data-transformation" id="toc-data-transformation" class="nav-link" data-scroll-target="#data-transformation"><em>Data transformation</em></a></li>
   <li><a href="#data-exploration" id="toc-data-exploration" class="nav-link" data-scroll-target="#data-exploration"><em>Data Exploration</em></a></li>
   <li><a href="#choices-for-graphs-used-in-visualization" id="toc-choices-for-graphs-used-in-visualization" class="nav-link" data-scroll-target="#choices-for-graphs-used-in-visualization"><em>Choices for graphs used in visualization</em></a></li>
   <li><a href="#section" id="toc-section" class="nav-link" data-scroll-target="#section"></a></li>
@@ -126,7 +127,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">January 25, 2024</p>
+      <p class="date">January 26, 2024</p>
     </div>
   </div>
   
@@ -151,36 +152,84 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p>Explore the correlation between rainfall patterns and additional socio-economic, environmental, and infrastructural variables.</p></li>
 <li><p>Derive actionable insights for policymakers, urban planners, and researchers to guide sustainable development strategies.</p></li>
 </ul>
-<p><strong>Significance:</strong></p>
-<p>Understanding the nuances of rainfall distribution in different districts of Uganda is crucial for informed decision-making and sustainable development. This analysis, focused on distinct districts, aims to provide valuable insights into local precipitation patterns, environmental trends, and the impact of various factors on rainfall distribution. The outcomes of this study can guide policy interventions, infrastructure planning, and strategic decision-making to ensure balanced regional growth and address environmental challenges.</p>
-<p>The project employs statistical analysis, time series modeling, and data visualization techniques using the R programming language. This comprehensive approach integrates data from various sources, offering a holistic view of the factors influencing rainfall patterns in Uganda. The results aim to facilitate evidence-based decision-making for policymakers, researchers, and stakeholders involved in the sustainable development of the region.</p>
 <section id="introduction" class="level1">
 <h1>Introduction</h1>
-<p>The data for this study was acquired from the Uganda Beaureau of Statistics, specifically focusing on climate data for rainfall amounts received by selected districts in 2021. The original dataset is an Excel file encompassing information on sanitation, water, wastewater, and population. For the analysis, I opted to extract and focus on population data. It is important to note that the analysis conducted serves an academic purpose.</p>
+<p>The data for this study was acquired from the Uganda Beaureau of Statistics, specifically focusing on climate data for rainfall amounts received by selected districts in 2021.</p>
+<p>It is important to note that the analysis conducted serves an academic purpose only.</p>
+<p>Understanding the nuances of rainfall distribution in different districts of Uganda is crucial for informed decision-making and sustainable development. This analysis, focused on distinct districts, aims to provide valuable insights into local precipitation patterns, environmental trends, and the impact of various factors on rainfall distribution. The outcomes of this study can guide policy interventions, infrastructure planning, and strategic decision-making to ensure balanced regional growth and address environmental challenges.</p>
+<p>The project employs statistical analysis, time series modeling, and data visualization techniques using the R programming language. This comprehensive approach integrates data from various sources, offering a holistic view of the factors influencing rainfall patterns in Uganda. The results aim to facilitate evidence-based decision-making for policymakers, researchers, and stakeholders involved in the sustainable development of the region.</p>
 </section>
 <section id="methods" class="level1">
 <h1>Methods</h1>
 <section id="data-import" class="level2">
 <h2 class="anchored" data-anchor-id="data-import"><em>Data Import</em></h2>
 <div class="cell">
+<details>
+<summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Importing the selected data frame</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readxl)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>Monthly_rainfall_for_selected_centres_in_mm_2021 <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">"/cloud/project/data/raw/Monthly_rainfall_for_selected_centres_in_mm_2021.xlsx"</span>, </span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">range =</span> <span class="st">"B3:N23"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 </div>
 </section>
 <section id="data-cleaning" class="level2">
 <h2 class="anchored" data-anchor-id="data-cleaning"><em>Data cleaning</em></h2>
-<p>The variables names were adjusted so as to comply with the basic regulations of data science. The code chunk below shows how the variable “% Urban” was renamed to “percent_urban”.</p>
-<p>The data was inspected for any missing values, outliers, and data types contained in a specific variable. The box plot below below shows that there were no outliers.</p>
+<p>The district of Wakiso was mistakenly registered twice in the raw data. For the purpose of a more representative analysis, one of the obersvations was located to Apac District, my home District.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>Monthly_rainfall_for_selected_centres_in_mm_2021 <span class="ot">&lt;-</span>   Monthly_rainfall_for_selected_centres_in_mm_2021 <span class="sc">|&gt;</span> </span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">District =</span> <span class="fu">case_when</span>(</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    Jan <span class="sc">==</span> <span class="fl">154.4</span> <span class="sc">~</span> <span class="st">"Apac"</span>,</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">.default =</span> District</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  ))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="data-transformation" class="level2">
+<h2 class="anchored" data-anchor-id="data-transformation"><em>Data transformation</em></h2>
+<p>For easier analysis of this dataset, the data was pivoted with a new variable months.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>monthly_rainfall <span class="ot">&lt;-</span> Monthly_rainfall_for_selected_centres_in_mm_2021 <span class="sc">|&gt;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> Jan<span class="sc">:</span>Dec,</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">"months"</span>,</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">"rainfall_in_mm"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Monthly rainfall for selected districts of Lira, Arua and Jinja.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># monthly rainfall extracted for Arua, Lira and Jinja districts</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>monthly_rainfall_arua_lira_and_Jinja <span class="ot">&lt;-</span> monthly_rainfall <span class="sc">|&gt;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(District <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Arua"</span>, <span class="st">"Lira"</span>, <span class="st">"Jinja"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
 </section>
 <section id="data-exploration" class="level2">
 <h2 class="anchored" data-anchor-id="data-exploration"><em>Data Exploration</em></h2>
-<p>By using the glimpse function, a brief insight in to the data frame was depicted showing the variables and observations within the data frame.</p>
+<p><a href="#fig-plot">Figure&nbsp;1</a> is a scatter diagram showing the rainfall amounts received by different districts in the month of january 2021 in Uganda.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">view</span>(Monthly_rainfall_for_selected_centres_in_mm_2021)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">data =</span> Monthly_rainfall_for_selected_centres_in_mm_2021,</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> Jan,</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">y =</span> District,</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">color =</span> District)) <span class="sc">+</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Rainfall received in January (mm)"</span>, <span class="at">y =</span> <span class="st">"Districts"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div id="fig-plot" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="index_files/figure-html/fig-plot-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption">Figure&nbsp;1: Rainfall Distribution in different districts in January</figcaption>
+</figure>
+</div>
+</div>
 </div>
 </section>
 <section id="choices-for-graphs-used-in-visualization" class="level2">
@@ -237,42 +286,1173 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ol type="1">
 <li><p><strong>Spatial and Temporal Patterns:</strong></p>
 <ul>
-<li>Identification and description of spatial and temporal patterns in rainfall distribution across districts.</li>
+<li><p>Identification and description of spatial and temporal patterns in rainfall distribution across districts.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> monthly_rainfall,</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> months,</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">y =</span> rainfall_in_mm)) <span class="sc">+</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>District, <span class="at">ncol =</span> <span class="dv">4</span>) <span class="sc">+</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Monthly Rainfall Across Districts in 2021"</span>,</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Month"</span>,</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Rainfall (mm)"</span>) <span class="sc">+</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">8</span>, <span class="at">angle =</span> <span class="dv">90</span>, <span class="at">hjust =</span> <span class="dv">1</span>),</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>        <span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">10</span>),</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>        <span class="at">strip.background =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">14</span>, <span class="at">face =</span> <span class="st">"bold"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="672"></p>
+</div>
+</div></li>
 </ul></li>
 <li><p><strong>Total Annual Rainfall:</strong></p>
 <ul>
-<li>Total annual rainfall amounts for each district, providing an overview of regional variations.</li>
+<li><p>The <a href="#tbl-tar">Table&nbsp;1</a> below shows total annual rainfall amounts for each district, providing an overview of regional variations.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>total_annual_rainfall <span class="ot">&lt;-</span> monthly_rainfall <span class="sc">|&gt;</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(District) <span class="sc">|&gt;</span> </span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">total_annual_rainfall =</span> <span class="fu">sum</span>(rainfall_in_mm))</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>total_annual_rainfall<span class="sc">|&gt;</span> </span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_number</span>(<span class="at">columns =</span> <span class="fu">c</span>(total_annual_rainfall),</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>             <span class="at">decimals =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div id="tbl-tar" class="anchored">
+
+<div id="iweqbcptwb" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#iweqbcptwb table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#iweqbcptwb thead, #iweqbcptwb tbody, #iweqbcptwb tfoot, #iweqbcptwb tr, #iweqbcptwb td, #iweqbcptwb th {
+  border-style: none;
+}
+
+#iweqbcptwb p {
+  margin: 0;
+  padding: 0;
+}
+
+#iweqbcptwb .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#iweqbcptwb .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#iweqbcptwb .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#iweqbcptwb .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#iweqbcptwb .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#iweqbcptwb .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#iweqbcptwb .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#iweqbcptwb .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#iweqbcptwb .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#iweqbcptwb .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#iweqbcptwb .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#iweqbcptwb .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#iweqbcptwb .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#iweqbcptwb .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#iweqbcptwb .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#iweqbcptwb .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#iweqbcptwb .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#iweqbcptwb .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#iweqbcptwb .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#iweqbcptwb .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#iweqbcptwb .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#iweqbcptwb .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#iweqbcptwb .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#iweqbcptwb .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#iweqbcptwb .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#iweqbcptwb .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#iweqbcptwb .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#iweqbcptwb .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#iweqbcptwb .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#iweqbcptwb .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#iweqbcptwb .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#iweqbcptwb .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#iweqbcptwb .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#iweqbcptwb .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#iweqbcptwb .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#iweqbcptwb .gt_left {
+  text-align: left;
+}
+
+#iweqbcptwb .gt_center {
+  text-align: center;
+}
+
+#iweqbcptwb .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#iweqbcptwb .gt_font_normal {
+  font-weight: normal;
+}
+
+#iweqbcptwb .gt_font_bold {
+  font-weight: bold;
+}
+
+#iweqbcptwb .gt_font_italic {
+  font-style: italic;
+}
+
+#iweqbcptwb .gt_super {
+  font-size: 65%;
+}
+
+#iweqbcptwb .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#iweqbcptwb .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#iweqbcptwb .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#iweqbcptwb .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#iweqbcptwb .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#iweqbcptwb .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#iweqbcptwb .gt_indent_5 {
+  text-indent: 25px;
+}
+</style>
+<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false"><caption>Table&nbsp;1:  <p>A table showing the total annual rainfall received in different
+districts in 2021</p> </caption>
+  <thead>
+
+    <tr class="gt_col_headings">
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="District">District</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="total_annual_rainfall">total_annual_rainfall</th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td headers="District" class="gt_row gt_left">Apac</td>
+<td headers="total_annual_rainfall" class="gt_row gt_right">1,369.9</td></tr>
+    <tr><td headers="District" class="gt_row gt_left">Arua</td>
+<td headers="total_annual_rainfall" class="gt_row gt_right">1,279.0</td></tr>
+    <tr><td headers="District" class="gt_row gt_left">Bulambuli</td>
+<td headers="total_annual_rainfall" class="gt_row gt_right">1,911.0</td></tr>
+    <tr><td headers="District" class="gt_row gt_left">Gulu</td>
+<td headers="total_annual_rainfall" class="gt_row gt_right">1,678.8</td></tr>
+    <tr><td headers="District" class="gt_row gt_left">Jinja</td>
+<td headers="total_annual_rainfall" class="gt_row gt_right">1,628.9</td></tr>
+    <tr><td headers="District" class="gt_row gt_left">Kabale</td>
+<td headers="total_annual_rainfall" class="gt_row gt_right">953.3</td></tr>
+    <tr><td headers="District" class="gt_row gt_left">Kampala</td>
+<td headers="total_annual_rainfall" class="gt_row gt_right">1,674.8</td></tr>
+    <tr><td headers="District" class="gt_row gt_left">Kasese</td>
+<td headers="total_annual_rainfall" class="gt_row gt_right">918.3</td></tr>
+    <tr><td headers="District" class="gt_row gt_left">Kitgum</td>
+<td headers="total_annual_rainfall" class="gt_row gt_right">1,361.2</td></tr>
+    <tr><td headers="District" class="gt_row gt_left">Kotido</td>
+<td headers="total_annual_rainfall" class="gt_row gt_right">822.6</td></tr>
+    <tr><td headers="District" class="gt_row gt_left">Lira</td>
+<td headers="total_annual_rainfall" class="gt_row gt_right">1,024.7</td></tr>
+    <tr><td headers="District" class="gt_row gt_left">Masindi</td>
+<td headers="total_annual_rainfall" class="gt_row gt_right">1,076.6</td></tr>
+    <tr><td headers="District" class="gt_row gt_left">Mbarara</td>
+<td headers="total_annual_rainfall" class="gt_row gt_right">933.2</td></tr>
+    <tr><td headers="District" class="gt_row gt_left">Mubende</td>
+<td headers="total_annual_rainfall" class="gt_row gt_right">1,028.0</td></tr>
+    <tr><td headers="District" class="gt_row gt_left">Rakai</td>
+<td headers="total_annual_rainfall" class="gt_row gt_right">1,202.7</td></tr>
+    <tr><td headers="District" class="gt_row gt_left">Serere</td>
+<td headers="total_annual_rainfall" class="gt_row gt_right">1,119.9</td></tr>
+    <tr><td headers="District" class="gt_row gt_left">Soroti</td>
+<td headers="total_annual_rainfall" class="gt_row gt_right">1,060.3</td></tr>
+    <tr><td headers="District" class="gt_row gt_left">Ssembabule</td>
+<td headers="total_annual_rainfall" class="gt_row gt_right">948.1</td></tr>
+    <tr><td headers="District" class="gt_row gt_left">Tororo</td>
+<td headers="total_annual_rainfall" class="gt_row gt_right">1,538.0</td></tr>
+    <tr><td headers="District" class="gt_row gt_left">Wakiso</td>
+<td headers="total_annual_rainfall" class="gt_row gt_right">1,399.0</td></tr>
+  </tbody>
+
+
+</table>
+</div>
+</div>
+</div>
+</div></li>
 </ul></li>
 <li><p><strong>Monthly Rainfall Variations:</strong></p>
 <ul>
-<li><p>Analysis of monthly variations in rainfall, identifying peak months and dry periods in each district.</p>
+<li><p>The <a href="#tbl-cat">Table&nbsp;2</a> below shows analysis of monthly variations in rainfall, identifying peak months and dry periods in the districts of Arua, Lira and Jinja as case studies.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>Monthly_rainfall_for_selected_centres_in_mm_2021</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 20 × 13
-   District     Jan   Feb   Mar   Apr   May   Jun   Jul   Aug   Sep   Oct   Nov
-   &lt;chr&gt;      &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
- 1 Arua         0     0.2  71.1  57.7 146.  114.  197.  125.  172.  241.  148. 
- 2 Kitgum      19     1.3  34   270.  124.  121.  206.  243.  177.  100.   56.1
- 3 Gulu         0     4.4  84.2 140.  338.  161.  120.  159.  229.  225.  174. 
- 4 Masindi      4.9  36.3  83.5  89.6 120     8.3  15.5 193.  165.  186.  123. 
- 5 Kasese      80.6  21.2  47.6 118.   70.4  48.8  54.2 115.  127.   99    41.1
- 6 Kabale      61.3  66   157.   74.9  48     0.2  28    83.1 130.   82.6 110. 
- 7 Mbarara     62.6 107.  105   108.   42.8  20.2  12.1  95.3  66.7 117   109. 
- 8 Wakiso     154.    2.8 158.  256.  179    77    32.9  27.7  97.2 167.  163. 
- 9 Kampala     60.5 168.  165.  167.  202.  112.   59    85.9 130   225.  174. 
-10 Wakiso      35.9 108    98.1 225   212.  163.   35.3  65.7 126.  142.   89.5
-11 Jinja      155.   27.4 220.  333.  151.   46.6  48.9 156.  119.  145.   64.3
-12 Tororo      67.1  70.7 113.  413.  153.  105.   55.5 116.  159.  143.   60.9
-13 Soroti      74     9.9  13.9 147.  135.   41.6 102.  186.  166.  128.   46.4
-14 Mubende     20.6   3.6 164.  144.   58.2  49.2  23.5  54.4  96.5 209.  163. 
-15 Lira         5    14.4  75.5 144.  112.  156.   86    95.8 168.  128.   37  
-16 Rakai       28.9  70.6 133.  339.  176.    8.3   5.3  10.2 112.  117.   90.6
-17 Serere      52.8   5.9  42.1 184.  119.   73.8  91.3 166.  216.  110.   51.9
-18 Ssembabule  65.6   2.6  96.4 198.  116.    5.9  23.1  52.3  85.5 137.   77  
-19 Kotido       2.7   0    10.2 120.  180.   11.1 198.   64.1 146.   70.4  20.5
-20 Bulambuli   87.6  25.6  36.6 240.  271.   83.9 112.  205.  452.  269.  126. 
-# ℹ 1 more variable: Dec &lt;dbl&gt;</code></pre>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the thresholds for high, medium, and low rainfall rates</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>high_threshold <span class="ot">&lt;-</span> <span class="dv">150</span>  <span class="co"># mm/h</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>medium_threshold <span class="ot">&lt;-</span> <span class="dv">50</span>  <span class="co"># mm/h</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Categorize the rainfall values</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>monthly_rainfall_category <span class="ot">&lt;-</span> monthly_rainfall_arua_lira_and_Jinja <span class="sc">|&gt;</span> </span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">rainfall_cat =</span> <span class="fu">case_when</span>(</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    rainfall_in_mm <span class="sc">&gt;</span> high_threshold <span class="sc">~</span> <span class="st">"high"</span>,</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    rainfall_in_mm <span class="sc">&gt;</span> medium_threshold <span class="sc">~</span> <span class="st">"medium"</span>,</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    <span class="cn">TRUE</span> <span class="sc">~</span> <span class="st">"low"</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  ))</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>monthly_rainfall_category <span class="sc">|&gt;</span> </span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> months,</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>              <span class="at">values_from =</span> rainfall_in_mm) <span class="sc">|&gt;</span> </span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_header</span>(</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Monthly Rainfall by District and Category"</span>,</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Data from 2021"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div id="tbl-cat" class="anchored">
+
+<div id="naapbmhlxw" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#naapbmhlxw table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#naapbmhlxw thead, #naapbmhlxw tbody, #naapbmhlxw tfoot, #naapbmhlxw tr, #naapbmhlxw td, #naapbmhlxw th {
+  border-style: none;
+}
+
+#naapbmhlxw p {
+  margin: 0;
+  padding: 0;
+}
+
+#naapbmhlxw .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#naapbmhlxw .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#naapbmhlxw .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#naapbmhlxw .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#naapbmhlxw .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#naapbmhlxw .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#naapbmhlxw .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#naapbmhlxw .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#naapbmhlxw .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#naapbmhlxw .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#naapbmhlxw .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#naapbmhlxw .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#naapbmhlxw .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#naapbmhlxw .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#naapbmhlxw .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#naapbmhlxw .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#naapbmhlxw .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#naapbmhlxw .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#naapbmhlxw .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#naapbmhlxw .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#naapbmhlxw .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#naapbmhlxw .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#naapbmhlxw .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#naapbmhlxw .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#naapbmhlxw .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#naapbmhlxw .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#naapbmhlxw .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#naapbmhlxw .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#naapbmhlxw .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#naapbmhlxw .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#naapbmhlxw .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#naapbmhlxw .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#naapbmhlxw .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#naapbmhlxw .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#naapbmhlxw .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#naapbmhlxw .gt_left {
+  text-align: left;
+}
+
+#naapbmhlxw .gt_center {
+  text-align: center;
+}
+
+#naapbmhlxw .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#naapbmhlxw .gt_font_normal {
+  font-weight: normal;
+}
+
+#naapbmhlxw .gt_font_bold {
+  font-weight: bold;
+}
+
+#naapbmhlxw .gt_font_italic {
+  font-style: italic;
+}
+
+#naapbmhlxw .gt_super {
+  font-size: 65%;
+}
+
+#naapbmhlxw .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#naapbmhlxw .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#naapbmhlxw .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#naapbmhlxw .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#naapbmhlxw .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#naapbmhlxw .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#naapbmhlxw .gt_indent_5 {
+  text-indent: 25px;
+}
+</style>
+<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false"><caption>Table&nbsp;2:  <p>A table showing the variations of rainfall received in case study
+districts throughout the year</p> </caption>
+  <thead>
+    <tr class="gt_heading">
+      <td colspan="14" class="gt_heading gt_title gt_font_normal" style="">Monthly Rainfall by District and Category</td>
+    </tr>
+    <tr class="gt_heading">
+      <td colspan="14" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border" style="">Data from 2021</td>
+    </tr>
+    <tr class="gt_col_headings">
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="District">District</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="rainfall_cat">rainfall_cat</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Jan">Jan</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Feb">Feb</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Mar">Mar</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Apr">Apr</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="May">May</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Jun">Jun</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Jul">Jul</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Aug">Aug</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Sep">Sep</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Oct">Oct</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Nov">Nov</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Dec">Dec</th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td headers="District" class="gt_row gt_left">Arua</td>
+<td headers="rainfall_cat" class="gt_row gt_left">low</td>
+<td headers="Jan" class="gt_row gt_right">0.0</td>
+<td headers="Feb" class="gt_row gt_right">0.2</td>
+<td headers="Mar" class="gt_row gt_right">NA</td>
+<td headers="Apr" class="gt_row gt_right">NA</td>
+<td headers="May" class="gt_row gt_right">NA</td>
+<td headers="Jun" class="gt_row gt_right">NA</td>
+<td headers="Jul" class="gt_row gt_right">NA</td>
+<td headers="Aug" class="gt_row gt_right">NA</td>
+<td headers="Sep" class="gt_row gt_right">NA</td>
+<td headers="Oct" class="gt_row gt_right">NA</td>
+<td headers="Nov" class="gt_row gt_right">NA</td>
+<td headers="Dec" class="gt_row gt_right">7.9</td></tr>
+    <tr><td headers="District" class="gt_row gt_left">Arua</td>
+<td headers="rainfall_cat" class="gt_row gt_left">medium</td>
+<td headers="Jan" class="gt_row gt_right">NA</td>
+<td headers="Feb" class="gt_row gt_right">NA</td>
+<td headers="Mar" class="gt_row gt_right">71.1</td>
+<td headers="Apr" class="gt_row gt_right">57.7</td>
+<td headers="May" class="gt_row gt_right">146.3</td>
+<td headers="Jun" class="gt_row gt_right">113.8</td>
+<td headers="Jul" class="gt_row gt_right">NA</td>
+<td headers="Aug" class="gt_row gt_right">125.2</td>
+<td headers="Sep" class="gt_row gt_right">NA</td>
+<td headers="Oct" class="gt_row gt_right">NA</td>
+<td headers="Nov" class="gt_row gt_right">147.5</td>
+<td headers="Dec" class="gt_row gt_right">NA</td></tr>
+    <tr><td headers="District" class="gt_row gt_left">Arua</td>
+<td headers="rainfall_cat" class="gt_row gt_left">high</td>
+<td headers="Jan" class="gt_row gt_right">NA</td>
+<td headers="Feb" class="gt_row gt_right">NA</td>
+<td headers="Mar" class="gt_row gt_right">NA</td>
+<td headers="Apr" class="gt_row gt_right">NA</td>
+<td headers="May" class="gt_row gt_right">NA</td>
+<td headers="Jun" class="gt_row gt_right">NA</td>
+<td headers="Jul" class="gt_row gt_right">197.1</td>
+<td headers="Aug" class="gt_row gt_right">NA</td>
+<td headers="Sep" class="gt_row gt_right">171.5</td>
+<td headers="Oct" class="gt_row gt_right">240.7</td>
+<td headers="Nov" class="gt_row gt_right">NA</td>
+<td headers="Dec" class="gt_row gt_right">NA</td></tr>
+    <tr><td headers="District" class="gt_row gt_left">Jinja</td>
+<td headers="rainfall_cat" class="gt_row gt_left">high</td>
+<td headers="Jan" class="gt_row gt_right">154.8</td>
+<td headers="Feb" class="gt_row gt_right">NA</td>
+<td headers="Mar" class="gt_row gt_right">220.5</td>
+<td headers="Apr" class="gt_row gt_right">333.2</td>
+<td headers="May" class="gt_row gt_right">151.4</td>
+<td headers="Jun" class="gt_row gt_right">NA</td>
+<td headers="Jul" class="gt_row gt_right">NA</td>
+<td headers="Aug" class="gt_row gt_right">156.2</td>
+<td headers="Sep" class="gt_row gt_right">NA</td>
+<td headers="Oct" class="gt_row gt_right">NA</td>
+<td headers="Nov" class="gt_row gt_right">NA</td>
+<td headers="Dec" class="gt_row gt_right">161.4</td></tr>
+    <tr><td headers="District" class="gt_row gt_left">Jinja</td>
+<td headers="rainfall_cat" class="gt_row gt_left">low</td>
+<td headers="Jan" class="gt_row gt_right">NA</td>
+<td headers="Feb" class="gt_row gt_right">27.4</td>
+<td headers="Mar" class="gt_row gt_right">NA</td>
+<td headers="Apr" class="gt_row gt_right">NA</td>
+<td headers="May" class="gt_row gt_right">NA</td>
+<td headers="Jun" class="gt_row gt_right">46.6</td>
+<td headers="Jul" class="gt_row gt_right">48.9</td>
+<td headers="Aug" class="gt_row gt_right">NA</td>
+<td headers="Sep" class="gt_row gt_right">NA</td>
+<td headers="Oct" class="gt_row gt_right">NA</td>
+<td headers="Nov" class="gt_row gt_right">NA</td>
+<td headers="Dec" class="gt_row gt_right">NA</td></tr>
+    <tr><td headers="District" class="gt_row gt_left">Jinja</td>
+<td headers="rainfall_cat" class="gt_row gt_left">medium</td>
+<td headers="Jan" class="gt_row gt_right">NA</td>
+<td headers="Feb" class="gt_row gt_right">NA</td>
+<td headers="Mar" class="gt_row gt_right">NA</td>
+<td headers="Apr" class="gt_row gt_right">NA</td>
+<td headers="May" class="gt_row gt_right">NA</td>
+<td headers="Jun" class="gt_row gt_right">NA</td>
+<td headers="Jul" class="gt_row gt_right">NA</td>
+<td headers="Aug" class="gt_row gt_right">NA</td>
+<td headers="Sep" class="gt_row gt_right">119.4</td>
+<td headers="Oct" class="gt_row gt_right">144.8</td>
+<td headers="Nov" class="gt_row gt_right">64.3</td>
+<td headers="Dec" class="gt_row gt_right">NA</td></tr>
+    <tr><td headers="District" class="gt_row gt_left">Lira</td>
+<td headers="rainfall_cat" class="gt_row gt_left">low</td>
+<td headers="Jan" class="gt_row gt_right">5.0</td>
+<td headers="Feb" class="gt_row gt_right">14.4</td>
+<td headers="Mar" class="gt_row gt_right">NA</td>
+<td headers="Apr" class="gt_row gt_right">NA</td>
+<td headers="May" class="gt_row gt_right">NA</td>
+<td headers="Jun" class="gt_row gt_right">NA</td>
+<td headers="Jul" class="gt_row gt_right">NA</td>
+<td headers="Aug" class="gt_row gt_right">NA</td>
+<td headers="Sep" class="gt_row gt_right">NA</td>
+<td headers="Oct" class="gt_row gt_right">NA</td>
+<td headers="Nov" class="gt_row gt_right">37.0</td>
+<td headers="Dec" class="gt_row gt_right">3.4</td></tr>
+    <tr><td headers="District" class="gt_row gt_left">Lira</td>
+<td headers="rainfall_cat" class="gt_row gt_left">medium</td>
+<td headers="Jan" class="gt_row gt_right">NA</td>
+<td headers="Feb" class="gt_row gt_right">NA</td>
+<td headers="Mar" class="gt_row gt_right">75.5</td>
+<td headers="Apr" class="gt_row gt_right">143.5</td>
+<td headers="May" class="gt_row gt_right">112.5</td>
+<td headers="Jun" class="gt_row gt_right">NA</td>
+<td headers="Jul" class="gt_row gt_right">86.0</td>
+<td headers="Aug" class="gt_row gt_right">95.8</td>
+<td headers="Sep" class="gt_row gt_right">NA</td>
+<td headers="Oct" class="gt_row gt_right">127.7</td>
+<td headers="Nov" class="gt_row gt_right">NA</td>
+<td headers="Dec" class="gt_row gt_right">NA</td></tr>
+    <tr><td headers="District" class="gt_row gt_left">Lira</td>
+<td headers="rainfall_cat" class="gt_row gt_left">high</td>
+<td headers="Jan" class="gt_row gt_right">NA</td>
+<td headers="Feb" class="gt_row gt_right">NA</td>
+<td headers="Mar" class="gt_row gt_right">NA</td>
+<td headers="Apr" class="gt_row gt_right">NA</td>
+<td headers="May" class="gt_row gt_right">NA</td>
+<td headers="Jun" class="gt_row gt_right">156.2</td>
+<td headers="Jul" class="gt_row gt_right">NA</td>
+<td headers="Aug" class="gt_row gt_right">NA</td>
+<td headers="Sep" class="gt_row gt_right">167.7</td>
+<td headers="Oct" class="gt_row gt_right">NA</td>
+<td headers="Nov" class="gt_row gt_right">NA</td>
+<td headers="Dec" class="gt_row gt_right">NA</td></tr>
+  </tbody>
+
+
+</table>
+</div>
+</div>
 </div>
 </div></li>
 </ul></li>
@@ -372,8 +1552,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   author = {Otim, Haron},
   title = {Rainfall {Dynamics} in {Uganda:} {A} {District-Level}
     {Analysis} for 2021},
-  date = {2024-01-25},
-  url = {https://www.example.com},
+  date = {2024-01-26},
+  url = {https://ds4owd-001.github.io/project-Otim-Haron/},
   langid = {en},
   abstract = {This project employs advanced data analysis to investigate
     rainfall dynamics across different districts in Uganda for the year
@@ -389,7 +1569,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-otim2024" class="csl-entry quarto-appendix-citeas" role="listitem">
 Otim, Haron. 2024. <span>“Rainfall Dynamics in Uganda: A District-Level
-Analysis for 2021.”</span> My Blog. January 25, 2024. <a href="https://www.example.com">https://www.example.com</a>.
+Analysis for 2021.”</span> My Blog. January 26, 2024. <a href="https://ds4owd-001.github.io/project-Otim-Haron/">https://ds4owd-001.github.io/project-Otim-Haron/</a>.
 </div></div></section></div></main>
 <!-- /main column -->
 <script id="quarto-html-after-body" type="application/javascript">

@@ -2,6 +2,9 @@
 title: "Rainfall Dynamics in Uganda: A District-Level Analysis for 2021"
 date: today
 toc: true
+code-fold: true
+execute: 
+  warning: false
 author:
   - name: Haron Otim
     orcid: 0009-0003-2730-950X
@@ -14,7 +17,7 @@ abstract:
 license: "CC BY"
 citation: 
   container-title: My Blog
-  url: https://www.example.com
+  url: https://ds4owd-001.github.io/project-Otim-Haron/
 editor: visual
 ---
 
@@ -32,15 +35,15 @@ This project endeavors to investigate and comprehend the dynamic patterns of rai
 
 -   Derive actionable insights for policymakers, urban planners, and researchers to guide sustainable development strategies.
 
-**Significance:**
+# Introduction
+
+The data for this study was acquired from the Uganda Beaureau of Statistics, specifically focusing on climate data for rainfall amounts received by selected districts in 2021.
+
+It is important to note that the analysis conducted serves an academic purpose only.
 
 Understanding the nuances of rainfall distribution in different districts of Uganda is crucial for informed decision-making and sustainable development. This analysis, focused on distinct districts, aims to provide valuable insights into local precipitation patterns, environmental trends, and the impact of various factors on rainfall distribution. The outcomes of this study can guide policy interventions, infrastructure planning, and strategic decision-making to ensure balanced regional growth and address environmental challenges.
 
 The project employs statistical analysis, time series modeling, and data visualization techniques using the R programming language. This comprehensive approach integrates data from various sources, offering a holistic view of the factors influencing rainfall patterns in Uganda. The results aim to facilitate evidence-based decision-making for policymakers, researchers, and stakeholders involved in the sustainable development of the region.
-
-# Introduction
-
-The data for this study was acquired from the Uganda Beaureau of Statistics, specifically focusing on climate data for rainfall amounts received by selected districts in 2021. The original dataset is an Excel file encompassing information on sanitation, water, wastewater, and population. For the analysis, I opted to extract and focus on population data. It is important to note that the analysis conducted serves an academic purpose.
 
 ```{r setup, include = FALSE}
 library(tidyverse)
@@ -67,26 +70,49 @@ Monthly_rainfall_for_selected_centres_in_mm_2021 <- read_excel("/cloud/project/d
 
 ## *Data cleaning*
 
-The variables names were adjusted so as to comply with the basic regulations of data science. The code chunk below shows how the variable "% Urban" was renamed to "percent_urban".
+The district of Wakiso was mistakenly registered twice in the raw data. For the purpose of a more representative analysis, one of the obersvations was located to Apac District, my home District.
 
 ```{r}
-
+Monthly_rainfall_for_selected_centres_in_mm_2021 <-   Monthly_rainfall_for_selected_centres_in_mm_2021 |> 
+  mutate(District = case_when(
+    Jan == 154.4 ~ "Apac",
+    .default = District
+  ))
 ```
 
-The data was inspected for any missing values, outliers, and data types contained in a specific variable. The box plot below below shows that there were no outliers.
+## *Data transformation*
+
+For easier analysis of this dataset, the data was pivoted with a new variable months.
 
 ```{r}
+monthly_rainfall <- Monthly_rainfall_for_selected_centres_in_mm_2021 |>
+  pivot_longer(cols = Jan:Dec,
+               names_to = "months",
+               values_to = "rainfall_in_mm")
+```
 
+Monthly rainfall for selected districts of Lira, Arua and Jinja.
+
+```{r}
+# monthly rainfall extracted for Arua, Lira and Jinja districts
+monthly_rainfall_arua_lira_and_Jinja <- monthly_rainfall |>
+  filter(District %in% c("Arua", "Lira", "Jinja"))
 ```
 
 ## *Data Exploration*
 
-By using the glimpse function, a brief insight in to the data frame was depicted showing the variables and observations within the data frame.
+@fig-plot is a scatter diagram showing the rainfall amounts received by different districts in the month of january 2021 in Uganda.
 
 ```{r}
-library(dplyr)
-library(tidyverse)
-view(Monthly_rainfall_for_selected_centres_in_mm_2021)
+#| fig-cap: Rainfall Distribution in different districts in January
+#| label: fig-plot
+
+  ggplot(data = Monthly_rainfall_for_selected_centres_in_mm_2021,
+       mapping = aes(x = Jan,
+                     y = District,
+                     color = District)) +
+  geom_point() + 
+  labs(x = "Rainfall received in January (mm)", y = "Districts")
 ```
 
 ## *Choices for graphs used in visualization*
@@ -143,16 +169,67 @@ view(Monthly_rainfall_for_selected_centres_in_mm_2021)
 
     -   Identification and description of spatial and temporal patterns in rainfall distribution across districts.
 
+        ```{r}
+        ggplot(data = monthly_rainfall,
+               aes(x = months,
+                   y = rainfall_in_mm)) +
+          geom_col() +
+          facet_wrap(~District, ncol = 4) +
+          labs(title = "Monthly Rainfall Across Districts in 2021",
+               x = "Month",
+               y = "Rainfall (mm)") +
+          theme_minimal() +
+          theme(axis.text.x = element_text(size = 8, angle = 90, hjust = 1),
+                strip.text = element_text(size = 10),
+                strip.background = element_blank(),
+                plot.title = element_text(size = 14, face = "bold"))
+
+        ```
+
 2.  **Total Annual Rainfall:**
 
-    -   Total annual rainfall amounts for each district, providing an overview of regional variations.
+    -   The @tbl-tar below shows total annual rainfall amounts for each district, providing an overview of regional variations.
+
+        ```{r}
+        #| label: tbl-tar
+        #| tbl-cap: A table showing the total annual rainfall received in different districts in 2021
+        total_annual_rainfall <- monthly_rainfall |>
+          group_by(District) |> 
+          summarize(total_annual_rainfall = sum(rainfall_in_mm))
+        total_annual_rainfall|> 
+          gt() |> 
+          fmt_number(columns = c(total_annual_rainfall),
+                     decimals = 1)
+        ```
 
 3.  **Monthly Rainfall Variations:**
 
-    -   Analysis of monthly variations in rainfall, identifying peak months and dry periods in each district.
+    -   The @tbl-cat below shows analysis of monthly variations in rainfall, identifying peak months and dry periods in the districts of Arua, Lira and Jinja as case studies.
 
         ```{r}
-        Monthly_rainfall_for_selected_centres_in_mm_2021
+        #| label: tbl-cat
+        #| tbl-cap: A table showing the variations of rainfall received in case study districts throughout the year
+
+        # Define the thresholds for high, medium, and low rainfall rates
+        high_threshold <- 150  # mm/h
+        medium_threshold <- 50  # mm/h
+
+        # Categorize the rainfall values
+        monthly_rainfall_category <- monthly_rainfall_arua_lira_and_Jinja |> 
+          mutate(rainfall_cat = case_when(
+            rainfall_in_mm > high_threshold ~ "high",
+            rainfall_in_mm > medium_threshold ~ "medium",
+            TRUE ~ "low"
+          ))
+
+        monthly_rainfall_category |> 
+          pivot_wider(names_from = months,
+                      values_from = rainfall_in_mm) |> 
+          gt() |> 
+          tab_header(
+            title = "Monthly Rainfall by District and Category",
+            subtitle = "Data from 2021")
+
         ```
 
 4.  **Correlations with Socio-Economic Variables:**
