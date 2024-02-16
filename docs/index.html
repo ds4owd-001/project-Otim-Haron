@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Haron Otim">
-<meta name="dcterms.date" content="2024-01-26">
+<meta name="dcterms.date" content="2024-02-16">
 
 <title>Rainfall Dynamics in Uganda: A District-Level Analysis for 2021</title>
 <style>
@@ -56,7 +56,26 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="index_files/libs/clipboard/clipboard.min.js"></script>
@@ -84,16 +103,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
   <li><a href="#methods" id="toc-methods" class="nav-link" data-scroll-target="#methods">Methods</a>
   <ul class="collapse">
-  <li><a href="#data-import" id="toc-data-import" class="nav-link" data-scroll-target="#data-import"><em>Data Import</em></a></li>
+  <li><a href="#raw-data-import" id="toc-raw-data-import" class="nav-link" data-scroll-target="#raw-data-import"><em>Raw Data Import</em></a></li>
   <li><a href="#data-cleaning" id="toc-data-cleaning" class="nav-link" data-scroll-target="#data-cleaning"><em>Data cleaning</em></a></li>
   <li><a href="#data-transformation" id="toc-data-transformation" class="nav-link" data-scroll-target="#data-transformation"><em>Data transformation</em></a></li>
+  <li><a href="#processed-analysis-ready-data" id="toc-processed-analysis-ready-data" class="nav-link" data-scroll-target="#processed-analysis-ready-data"><em>Processed Analysis ready data</em></a></li>
   <li><a href="#data-exploration" id="toc-data-exploration" class="nav-link" data-scroll-target="#data-exploration"><em>Data Exploration</em></a></li>
   <li><a href="#choices-for-graphs-used-in-visualization" id="toc-choices-for-graphs-used-in-visualization" class="nav-link" data-scroll-target="#choices-for-graphs-used-in-visualization"><em>Choices for graphs used in visualization</em></a></li>
-  <li><a href="#section" id="toc-section" class="nav-link" data-scroll-target="#section"></a></li>
   </ul></li>
   <li><a href="#results" id="toc-results" class="nav-link" data-scroll-target="#results">Results</a></li>
   <li><a href="#conclusions" id="toc-conclusions" class="nav-link" data-scroll-target="#conclusions">Conclusions</a></li>
-  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
 </nav>
 </div>
@@ -127,7 +145,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">January 26, 2024</p>
+      <p class="date">February 16, 2024</p>
     </div>
   </div>
   
@@ -156,13 +174,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h1>Introduction</h1>
 <p>The data for this study was acquired from the Uganda Beaureau of Statistics, specifically focusing on climate data for rainfall amounts received by selected districts in 2021.</p>
 <p>It is important to note that the analysis conducted serves an academic purpose only.</p>
-<p>Understanding the nuances of rainfall distribution in different districts of Uganda is crucial for informed decision-making and sustainable development. This analysis, focused on distinct districts, aims to provide valuable insights into local precipitation patterns, environmental trends, and the impact of various factors on rainfall distribution. The outcomes of this study can guide policy interventions, infrastructure planning, and strategic decision-making to ensure balanced regional growth and address environmental challenges.</p>
+<p>Understanding the nuances of rainfall distribution in different districts of Uganda is crucial for informed decision-making and sustainable development as narrated by <span class="citation" data-cites="IanBurton2005">(<a href="#ref-IanBurton2005" role="doc-biblioref">Burton, Malone, and Huq 2005</a>)</span>. This analysis, focused on distinct districts, aims to provide valuable insights into local precipitation patterns, environmental trends, and the impact of various factors on rainfall distribution. The outcomes of this study can guide policy interventions, infrastructure planning, and strategic decision-making to ensure balanced regional growth and address environmental challenges.</p>
 <p>The project employs statistical analysis, time series modeling, and data visualization techniques using the R programming language. This comprehensive approach integrates data from various sources, offering a holistic view of the factors influencing rainfall patterns in Uganda. The results aim to facilitate evidence-based decision-making for policymakers, researchers, and stakeholders involved in the sustainable development of the region.</p>
 </section>
 <section id="methods" class="level1">
 <h1>Methods</h1>
-<section id="data-import" class="level2">
-<h2 class="anchored" data-anchor-id="data-import"><em>Data Import</em></h2>
+<section id="raw-data-import" class="level2">
+<h2 class="anchored" data-anchor-id="raw-data-import"><em>Raw Data Import</em></h2>
 <div class="cell">
 <details>
 <summary>Code</summary>
@@ -175,7 +193,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="data-cleaning" class="level2">
 <h2 class="anchored" data-anchor-id="data-cleaning"><em>Data cleaning</em></h2>
-<p>The district of Wakiso was mistakenly registered twice in the raw data. For the purpose of a more representative analysis, one of the obersvations was located to Apac District, my home District.</p>
+<p>The district of Wakiso was mistakenly registered twice in the raw data. For the purpose of a more representative analysis, one of the obersvations was allocated to Apac District, my home District.</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
@@ -199,13 +217,26 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">"rainfall_in_mm"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
+</section>
+<section id="processed-analysis-ready-data" class="level2">
+<h2 class="anchored" data-anchor-id="processed-analysis-ready-data"><em>Processed Analysis ready data</em></h2>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># storing analysis ready data as a .csv file</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(monthly_rainfall, <span class="st">"/cloud/project/data/processed/monthly_rainfall_processed.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
 <p>Monthly rainfall for selected districts of Lira, Arua and Jinja.</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># monthly rainfall extracted for Arua, Lira and Jinja districts</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>monthly_rainfall_arua_lira_and_Jinja <span class="ot">&lt;-</span> monthly_rainfall <span class="sc">|&gt;</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(District <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Arua"</span>, <span class="st">"Lira"</span>, <span class="st">"Jinja"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># monthly rainfall extracted for Arua, Lira and Jinja districts</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>monthly_rainfall_processed <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"/cloud/project/data/processed/monthly_rainfall_processed.csv"</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>monthly_rainfall_arua_lira_and_Jinja <span class="ot">&lt;-</span> monthly_rainfall_processed <span class="sc">|&gt;</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(District <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Arua"</span>, <span class="st">"Lira"</span>, <span class="st">"Jinja"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 </section>
@@ -215,12 +246,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">data =</span> Monthly_rainfall_for_selected_centres_in_mm_2021,</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> Jan,</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">y =</span> District,</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">color =</span> District)) <span class="sc">+</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Rainfall received in January (mm)"</span>, <span class="at">y =</span> <span class="st">"Districts"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">data =</span> Monthly_rainfall_for_selected_centres_in_mm_2021,</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> Jan,</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">y =</span> District,</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">color =</span> District)) <span class="sc">+</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Rainfall received in January (mm)"</span>, <span class="at">y =</span> <span class="st">"Districts"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div id="fig-plot" class="quarto-figure quarto-figure-center anchored">
@@ -235,50 +266,42 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="choices-for-graphs-used-in-visualization" class="level2">
 <h2 class="anchored" data-anchor-id="choices-for-graphs-used-in-visualization"><em>Choices for graphs used in visualization</em></h2>
 <ol type="1">
-<li><p><strong>Time Series Plots:</strong></p>
-<ul>
-<li>To depict the temporal variation of rainfall across districts over the course of the year, helping identify trends and patterns.</li>
-</ul></li>
 <li><p><strong>Bar Charts:</strong></p>
 <ul>
-<li>For comparing total annual rainfall amounts or monthly variations among different districts, providing a clear visual comparison.</li>
-</ul></li>
-<li><p><strong>Heatmaps:</strong></p>
-<ul>
-<li>To represent spatial patterns of rainfall across districts, allowing for a quick overview of variations and hotspots.</li>
-</ul></li>
-<li><p><strong>Box Plots:</strong></p>
-<ul>
-<li>For displaying the distribution of rainfall values in each district, indicating variability, outliers, and central tendencies.</li>
-</ul></li>
-<li><p><strong>Scatter Plots:</strong></p>
-<ul>
-<li>To explore relationships between rainfall and other variables, such as population density or economic indicators, helping identify potential correlations.</li>
-</ul></li>
-<li><p><strong>Pie Charts:</strong></p>
-<ul>
-<li>To illustrate the proportion of districts experiencing different levels of rainfall, categorizing them into specific ranges.</li>
-</ul></li>
-<li><p><strong>Geospatial Maps:</strong></p>
-<ul>
-<li>To visualize the geographical distribution of rainfall across Uganda’s districts, providing an intuitive representation of regional differences.</li>
-</ul></li>
-<li><p><strong>Line Charts:</strong></p>
-<ul>
-<li>For displaying trends in rainfall over time for specific districts, highlighting any notable patterns or anomalies.</li>
-</ul></li>
-<li><p><strong>Area Charts:</strong></p>
-<ul>
-<li>To show cumulative rainfall over time, offering insights into the overall trend and cumulative effects.</li>
-</ul></li>
-<li><p><strong>Radar Charts:</strong></p>
-<ul>
-<li>For displaying multi-dimensional data, such as comparing rainfall, socio-economic, and environmental variables for each district simultaneously.</li>
+<li><p>For comparing total annual rainfall amounts or monthly variations among different districts, providing a clear visual comparison.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>monthly_rainfall_arua_lira_and_Jinja <span class="sc">|&gt;</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">fct_reorder</span>(months, <span class="fu">case_when</span>(months <span class="sc">==</span> <span class="st">"Jan"</span> <span class="sc">~</span> <span class="dv">1</span>,</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>                                                         months <span class="sc">==</span> <span class="st">"Feb"</span> <span class="sc">~</span> <span class="dv">2</span>,</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>                                                         months <span class="sc">==</span> <span class="st">"Mar"</span> <span class="sc">~</span> <span class="dv">3</span>,</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>                                                         months <span class="sc">==</span> <span class="st">"Apr"</span> <span class="sc">~</span> <span class="dv">4</span>,</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>                                                         months <span class="sc">==</span> <span class="st">"May"</span> <span class="sc">~</span> <span class="dv">5</span>,</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>                                                         months <span class="sc">==</span> <span class="st">"Jun"</span> <span class="sc">~</span> <span class="dv">6</span>,</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>                                                         months <span class="sc">==</span> <span class="st">"Jul"</span> <span class="sc">~</span> <span class="dv">7</span>,</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>                                                         months <span class="sc">==</span> <span class="st">"Aug"</span> <span class="sc">~</span> <span class="dv">8</span>,</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>                                                         months <span class="sc">==</span> <span class="st">"Sep"</span> <span class="sc">~</span> <span class="dv">9</span>,</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>                                                         months <span class="sc">==</span> <span class="st">"Oct"</span> <span class="sc">~</span> <span class="dv">10</span>,</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>                                                         months <span class="sc">==</span> <span class="st">"Nov"</span> <span class="sc">~</span> <span class="dv">11</span>,                                                             months <span class="sc">==</span> <span class="st">"Dec"</span> <span class="sc">~</span> <span class="dv">12</span>)),</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>                       <span class="at">y =</span> rainfall_in_mm)) <span class="sc">+</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>District) <span class="sc">+</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>   <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Monthly Rainfall Across Districts in 2021"</span>,</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Month"</span>,</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Rainfall (mm)"</span>) <span class="sc">+</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">8</span>, <span class="at">angle =</span> <span class="dv">90</span>, <span class="at">hjust =</span> <span class="dv">1</span>),</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>        <span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">10</span>),</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>        <span class="at">strip.background =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">14</span>, <span class="at">face =</span> <span class="st">"bold"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="672"></p>
+</div>
+</div></li>
 </ul></li>
 </ol>
-</section>
-<section id="section" class="level2">
-<h2 class="anchored" data-anchor-id="section"></h2>
 </section>
 </section>
 <section id="results" class="level1">
@@ -290,22 +313,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> monthly_rainfall,</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> months,</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">y =</span> rainfall_in_mm)) <span class="sc">+</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>District, <span class="at">ncol =</span> <span class="dv">4</span>) <span class="sc">+</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Monthly Rainfall Across Districts in 2021"</span>,</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Month"</span>,</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Rainfall (mm)"</span>) <span class="sc">+</span></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">8</span>, <span class="at">angle =</span> <span class="dv">90</span>, <span class="at">hjust =</span> <span class="dv">1</span>),</span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>        <span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">10</span>),</span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>        <span class="at">strip.background =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">14</span>, <span class="at">face =</span> <span class="st">"bold"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> monthly_rainfall,</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> months,</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">y =</span> rainfall_in_mm)) <span class="sc">+</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>District, <span class="at">ncol =</span> <span class="dv">4</span>) <span class="sc">+</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Monthly Rainfall Across Districts in 2021"</span>,</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Month"</span>,</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Rainfall (mm)"</span>) <span class="sc">+</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">8</span>, <span class="at">angle =</span> <span class="dv">90</span>, <span class="at">hjust =</span> <span class="dv">1</span>),</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>        <span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">10</span>),</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>        <span class="at">strip.background =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">14</span>, <span class="at">face =</span> <span class="st">"bold"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
 </div>
 </div></li>
 </ul></li>
@@ -315,34 +338,36 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>total_annual_rainfall <span class="ot">&lt;-</span> monthly_rainfall <span class="sc">|&gt;</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(District) <span class="sc">|&gt;</span> </span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">total_annual_rainfall =</span> <span class="fu">sum</span>(rainfall_in_mm))</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>total_annual_rainfall<span class="sc">|&gt;</span> </span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_number</span>(<span class="at">columns =</span> <span class="fu">c</span>(total_annual_rainfall),</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>             <span class="at">decimals =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gt)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>total_annual_rainfall <span class="ot">&lt;-</span> monthly_rainfall <span class="sc">|&gt;</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(District) <span class="sc">|&gt;</span> </span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">total_annual_rainfall =</span> <span class="fu">sum</span>(rainfall_in_mm))</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>total_annual_rainfall<span class="sc">|&gt;</span> </span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_number</span>(<span class="at">columns =</span> <span class="fu">c</span>(total_annual_rainfall),</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>             <span class="at">decimals =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div id="tbl-tar" class="anchored">
 
-<div id="iweqbcptwb" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#iweqbcptwb table {
+<div id="zqevgfvvmz" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#zqevgfvvmz table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#iweqbcptwb thead, #iweqbcptwb tbody, #iweqbcptwb tfoot, #iweqbcptwb tr, #iweqbcptwb td, #iweqbcptwb th {
+#zqevgfvvmz thead, #zqevgfvvmz tbody, #zqevgfvvmz tfoot, #zqevgfvvmz tr, #zqevgfvvmz td, #zqevgfvvmz th {
   border-style: none;
 }
 
-#iweqbcptwb p {
+#zqevgfvvmz p {
   margin: 0;
   padding: 0;
 }
 
-#iweqbcptwb .gt_table {
+#zqevgfvvmz .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -368,12 +393,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-left-color: #D3D3D3;
 }
 
-#iweqbcptwb .gt_caption {
+#zqevgfvvmz .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#iweqbcptwb .gt_title {
+#zqevgfvvmz .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -385,7 +410,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-width: 0;
 }
 
-#iweqbcptwb .gt_subtitle {
+#zqevgfvvmz .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -397,7 +422,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-top-width: 0;
 }
 
-#iweqbcptwb .gt_heading {
+#zqevgfvvmz .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -409,13 +434,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#iweqbcptwb .gt_bottom_border {
+#zqevgfvvmz .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#iweqbcptwb .gt_col_headings {
+#zqevgfvvmz .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -430,7 +455,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#iweqbcptwb .gt_col_heading {
+#zqevgfvvmz .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -450,7 +475,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   overflow-x: hidden;
 }
 
-#iweqbcptwb .gt_column_spanner_outer {
+#zqevgfvvmz .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -462,15 +487,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 4px;
 }
 
-#iweqbcptwb .gt_column_spanner_outer:first-child {
+#zqevgfvvmz .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#iweqbcptwb .gt_column_spanner_outer:last-child {
+#zqevgfvvmz .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#iweqbcptwb .gt_column_spanner {
+#zqevgfvvmz .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -482,11 +507,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   width: 100%;
 }
 
-#iweqbcptwb .gt_spanner_row {
+#zqevgfvvmz .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#iweqbcptwb .gt_group_heading {
+#zqevgfvvmz .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -512,7 +537,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   text-align: left;
 }
 
-#iweqbcptwb .gt_empty_group_heading {
+#zqevgfvvmz .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -527,15 +552,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   vertical-align: middle;
 }
 
-#iweqbcptwb .gt_from_md > :first-child {
+#zqevgfvvmz .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#iweqbcptwb .gt_from_md > :last-child {
+#zqevgfvvmz .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#iweqbcptwb .gt_row {
+#zqevgfvvmz .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -554,7 +579,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   overflow-x: hidden;
 }
 
-#iweqbcptwb .gt_stub {
+#zqevgfvvmz .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -567,7 +592,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#iweqbcptwb .gt_stub_row_group {
+#zqevgfvvmz .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -581,15 +606,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   vertical-align: top;
 }
 
-#iweqbcptwb .gt_row_group_first td {
+#zqevgfvvmz .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#iweqbcptwb .gt_row_group_first th {
+#zqevgfvvmz .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#iweqbcptwb .gt_summary_row {
+#zqevgfvvmz .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -599,16 +624,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#iweqbcptwb .gt_first_summary_row {
+#zqevgfvvmz .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#iweqbcptwb .gt_first_summary_row.thick {
+#zqevgfvvmz .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#iweqbcptwb .gt_last_summary_row {
+#zqevgfvvmz .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -618,7 +643,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#iweqbcptwb .gt_grand_summary_row {
+#zqevgfvvmz .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -628,7 +653,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#iweqbcptwb .gt_first_grand_summary_row {
+#zqevgfvvmz .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -638,7 +663,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-top-color: #D3D3D3;
 }
 
-#iweqbcptwb .gt_last_grand_summary_row_top {
+#zqevgfvvmz .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -648,11 +673,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#iweqbcptwb .gt_striped {
+#zqevgfvvmz .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#iweqbcptwb .gt_table_body {
+#zqevgfvvmz .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -661,7 +686,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#iweqbcptwb .gt_footnotes {
+#zqevgfvvmz .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -675,7 +700,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#iweqbcptwb .gt_footnote {
+#zqevgfvvmz .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -684,7 +709,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#iweqbcptwb .gt_sourcenotes {
+#zqevgfvvmz .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -698,7 +723,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#iweqbcptwb .gt_sourcenote {
+#zqevgfvvmz .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -706,63 +731,63 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#iweqbcptwb .gt_left {
+#zqevgfvvmz .gt_left {
   text-align: left;
 }
 
-#iweqbcptwb .gt_center {
+#zqevgfvvmz .gt_center {
   text-align: center;
 }
 
-#iweqbcptwb .gt_right {
+#zqevgfvvmz .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#iweqbcptwb .gt_font_normal {
+#zqevgfvvmz .gt_font_normal {
   font-weight: normal;
 }
 
-#iweqbcptwb .gt_font_bold {
+#zqevgfvvmz .gt_font_bold {
   font-weight: bold;
 }
 
-#iweqbcptwb .gt_font_italic {
+#zqevgfvvmz .gt_font_italic {
   font-style: italic;
 }
 
-#iweqbcptwb .gt_super {
+#zqevgfvvmz .gt_super {
   font-size: 65%;
 }
 
-#iweqbcptwb .gt_footnote_marks {
+#zqevgfvvmz .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#iweqbcptwb .gt_asterisk {
+#zqevgfvvmz .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#iweqbcptwb .gt_indent_1 {
+#zqevgfvvmz .gt_indent_1 {
   text-indent: 5px;
 }
 
-#iweqbcptwb .gt_indent_2 {
+#zqevgfvvmz .gt_indent_2 {
   text-indent: 10px;
 }
 
-#iweqbcptwb .gt_indent_3 {
+#zqevgfvvmz .gt_indent_3 {
   text-indent: 15px;
 }
 
-#iweqbcptwb .gt_indent_4 {
+#zqevgfvvmz .gt_indent_4 {
   text-indent: 20px;
 }
 
-#iweqbcptwb .gt_indent_5 {
+#zqevgfvvmz .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
@@ -831,46 +856,46 @@ districts in 2021</p> </caption>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the thresholds for high, medium, and low rainfall rates</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>high_threshold <span class="ot">&lt;-</span> <span class="dv">150</span>  <span class="co"># mm/h</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>medium_threshold <span class="ot">&lt;-</span> <span class="dv">50</span>  <span class="co"># mm/h</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Categorize the rainfall values</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>monthly_rainfall_category <span class="ot">&lt;-</span> monthly_rainfall_arua_lira_and_Jinja <span class="sc">|&gt;</span> </span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">rainfall_cat =</span> <span class="fu">case_when</span>(</span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    rainfall_in_mm <span class="sc">&gt;</span> high_threshold <span class="sc">~</span> <span class="st">"high"</span>,</span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    rainfall_in_mm <span class="sc">&gt;</span> medium_threshold <span class="sc">~</span> <span class="st">"medium"</span>,</span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    <span class="cn">TRUE</span> <span class="sc">~</span> <span class="st">"low"</span></span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  ))</span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>monthly_rainfall_category <span class="sc">|&gt;</span> </span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> months,</span>
-<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>              <span class="at">values_from =</span> rainfall_in_mm) <span class="sc">|&gt;</span> </span>
-<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_header</span>(</span>
-<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Monthly Rainfall by District and Category"</span>,</span>
-<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Data from 2021"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the thresholds for high, medium, and low rainfall rates</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>high_threshold <span class="ot">&lt;-</span> <span class="dv">150</span>  <span class="co"># mm/h</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>medium_threshold <span class="ot">&lt;-</span> <span class="dv">50</span>  <span class="co"># mm/h</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Categorize the rainfall values</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>monthly_rainfall_category <span class="ot">&lt;-</span> monthly_rainfall_arua_lira_and_Jinja <span class="sc">|&gt;</span> </span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">rainfall_cat =</span> <span class="fu">case_when</span>(</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    rainfall_in_mm <span class="sc">&gt;</span> high_threshold <span class="sc">~</span> <span class="st">"high"</span>,</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>    rainfall_in_mm <span class="sc">&gt;</span> medium_threshold <span class="sc">~</span> <span class="st">"medium"</span>,</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>    <span class="cn">TRUE</span> <span class="sc">~</span> <span class="st">"low"</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>  ))</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>monthly_rainfall_category <span class="sc">|&gt;</span> </span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> months,</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>              <span class="at">values_from =</span> rainfall_in_mm) <span class="sc">|&gt;</span> </span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_header</span>(</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Monthly Rainfall by District and Category"</span>,</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Data from 2021"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div id="tbl-cat" class="anchored">
 
-<div id="naapbmhlxw" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#naapbmhlxw table {
+<div id="swlpndjjuq" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#swlpndjjuq table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#naapbmhlxw thead, #naapbmhlxw tbody, #naapbmhlxw tfoot, #naapbmhlxw tr, #naapbmhlxw td, #naapbmhlxw th {
+#swlpndjjuq thead, #swlpndjjuq tbody, #swlpndjjuq tfoot, #swlpndjjuq tr, #swlpndjjuq td, #swlpndjjuq th {
   border-style: none;
 }
 
-#naapbmhlxw p {
+#swlpndjjuq p {
   margin: 0;
   padding: 0;
 }
 
-#naapbmhlxw .gt_table {
+#swlpndjjuq .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -896,12 +921,12 @@ districts in 2021</p> </caption>
   border-left-color: #D3D3D3;
 }
 
-#naapbmhlxw .gt_caption {
+#swlpndjjuq .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#naapbmhlxw .gt_title {
+#swlpndjjuq .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -913,7 +938,7 @@ districts in 2021</p> </caption>
   border-bottom-width: 0;
 }
 
-#naapbmhlxw .gt_subtitle {
+#swlpndjjuq .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -925,7 +950,7 @@ districts in 2021</p> </caption>
   border-top-width: 0;
 }
 
-#naapbmhlxw .gt_heading {
+#swlpndjjuq .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -937,13 +962,13 @@ districts in 2021</p> </caption>
   border-right-color: #D3D3D3;
 }
 
-#naapbmhlxw .gt_bottom_border {
+#swlpndjjuq .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#naapbmhlxw .gt_col_headings {
+#swlpndjjuq .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -958,7 +983,7 @@ districts in 2021</p> </caption>
   border-right-color: #D3D3D3;
 }
 
-#naapbmhlxw .gt_col_heading {
+#swlpndjjuq .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -978,7 +1003,7 @@ districts in 2021</p> </caption>
   overflow-x: hidden;
 }
 
-#naapbmhlxw .gt_column_spanner_outer {
+#swlpndjjuq .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -990,15 +1015,15 @@ districts in 2021</p> </caption>
   padding-right: 4px;
 }
 
-#naapbmhlxw .gt_column_spanner_outer:first-child {
+#swlpndjjuq .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#naapbmhlxw .gt_column_spanner_outer:last-child {
+#swlpndjjuq .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#naapbmhlxw .gt_column_spanner {
+#swlpndjjuq .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1010,11 +1035,11 @@ districts in 2021</p> </caption>
   width: 100%;
 }
 
-#naapbmhlxw .gt_spanner_row {
+#swlpndjjuq .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#naapbmhlxw .gt_group_heading {
+#swlpndjjuq .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1040,7 +1065,7 @@ districts in 2021</p> </caption>
   text-align: left;
 }
 
-#naapbmhlxw .gt_empty_group_heading {
+#swlpndjjuq .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1055,15 +1080,15 @@ districts in 2021</p> </caption>
   vertical-align: middle;
 }
 
-#naapbmhlxw .gt_from_md > :first-child {
+#swlpndjjuq .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#naapbmhlxw .gt_from_md > :last-child {
+#swlpndjjuq .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#naapbmhlxw .gt_row {
+#swlpndjjuq .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1082,7 +1107,7 @@ districts in 2021</p> </caption>
   overflow-x: hidden;
 }
 
-#naapbmhlxw .gt_stub {
+#swlpndjjuq .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1095,7 +1120,7 @@ districts in 2021</p> </caption>
   padding-right: 5px;
 }
 
-#naapbmhlxw .gt_stub_row_group {
+#swlpndjjuq .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1109,15 +1134,15 @@ districts in 2021</p> </caption>
   vertical-align: top;
 }
 
-#naapbmhlxw .gt_row_group_first td {
+#swlpndjjuq .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#naapbmhlxw .gt_row_group_first th {
+#swlpndjjuq .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#naapbmhlxw .gt_summary_row {
+#swlpndjjuq .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1127,16 +1152,16 @@ districts in 2021</p> </caption>
   padding-right: 5px;
 }
 
-#naapbmhlxw .gt_first_summary_row {
+#swlpndjjuq .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#naapbmhlxw .gt_first_summary_row.thick {
+#swlpndjjuq .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#naapbmhlxw .gt_last_summary_row {
+#swlpndjjuq .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1146,7 +1171,7 @@ districts in 2021</p> </caption>
   border-bottom-color: #D3D3D3;
 }
 
-#naapbmhlxw .gt_grand_summary_row {
+#swlpndjjuq .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1156,7 +1181,7 @@ districts in 2021</p> </caption>
   padding-right: 5px;
 }
 
-#naapbmhlxw .gt_first_grand_summary_row {
+#swlpndjjuq .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1166,7 +1191,7 @@ districts in 2021</p> </caption>
   border-top-color: #D3D3D3;
 }
 
-#naapbmhlxw .gt_last_grand_summary_row_top {
+#swlpndjjuq .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1176,11 +1201,11 @@ districts in 2021</p> </caption>
   border-bottom-color: #D3D3D3;
 }
 
-#naapbmhlxw .gt_striped {
+#swlpndjjuq .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#naapbmhlxw .gt_table_body {
+#swlpndjjuq .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1189,7 +1214,7 @@ districts in 2021</p> </caption>
   border-bottom-color: #D3D3D3;
 }
 
-#naapbmhlxw .gt_footnotes {
+#swlpndjjuq .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1203,7 +1228,7 @@ districts in 2021</p> </caption>
   border-right-color: #D3D3D3;
 }
 
-#naapbmhlxw .gt_footnote {
+#swlpndjjuq .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1212,7 +1237,7 @@ districts in 2021</p> </caption>
   padding-right: 5px;
 }
 
-#naapbmhlxw .gt_sourcenotes {
+#swlpndjjuq .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1226,7 +1251,7 @@ districts in 2021</p> </caption>
   border-right-color: #D3D3D3;
 }
 
-#naapbmhlxw .gt_sourcenote {
+#swlpndjjuq .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1234,63 +1259,63 @@ districts in 2021</p> </caption>
   padding-right: 5px;
 }
 
-#naapbmhlxw .gt_left {
+#swlpndjjuq .gt_left {
   text-align: left;
 }
 
-#naapbmhlxw .gt_center {
+#swlpndjjuq .gt_center {
   text-align: center;
 }
 
-#naapbmhlxw .gt_right {
+#swlpndjjuq .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#naapbmhlxw .gt_font_normal {
+#swlpndjjuq .gt_font_normal {
   font-weight: normal;
 }
 
-#naapbmhlxw .gt_font_bold {
+#swlpndjjuq .gt_font_bold {
   font-weight: bold;
 }
 
-#naapbmhlxw .gt_font_italic {
+#swlpndjjuq .gt_font_italic {
   font-style: italic;
 }
 
-#naapbmhlxw .gt_super {
+#swlpndjjuq .gt_super {
   font-size: 65%;
 }
 
-#naapbmhlxw .gt_footnote_marks {
+#swlpndjjuq .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#naapbmhlxw .gt_asterisk {
+#swlpndjjuq .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#naapbmhlxw .gt_indent_1 {
+#swlpndjjuq .gt_indent_1 {
   text-indent: 5px;
 }
 
-#naapbmhlxw .gt_indent_2 {
+#swlpndjjuq .gt_indent_2 {
   text-indent: 10px;
 }
 
-#naapbmhlxw .gt_indent_3 {
+#swlpndjjuq .gt_indent_3 {
   text-indent: 15px;
 }
 
-#naapbmhlxw .gt_indent_4 {
+#swlpndjjuq .gt_indent_4 {
   text-indent: 20px;
 }
 
-#naapbmhlxw .gt_indent_5 {
+#swlpndjjuq .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
@@ -1456,121 +1481,30 @@ districts throughout the year</p> </caption>
 </div>
 </div></li>
 </ul></li>
-<li><p><strong>Correlations with Socio-Economic Variables:</strong></p>
-<ul>
-<li>Insights into correlations between rainfall patterns and socio-economic variables, such as population density or economic indicators.</li>
-</ul></li>
-<li><p><strong>Identification of Hotspots:</strong></p>
-<ul>
-<li>Recognition of districts experiencing extreme or anomalous rainfall conditions, if any.</li>
-</ul></li>
-<li><p><strong>Spatial Mapping:</strong></p>
-<ul>
-<li>Geospatial maps illustrating the geographical distribution of rainfall, highlighting regions with distinct patterns.</li>
-</ul></li>
-<li><p><strong>Statistical Measures:</strong></p>
-<ul>
-<li>Descriptive statistics for rainfall data, including measures of central tendency, dispersion, and any relevant statistical tests.</li>
-</ul></li>
-<li><p><strong>Visualizations:</strong></p>
-<ul>
-<li>Presentation of visualizations (time series plots, bar charts, heatmaps, etc.) to effectively communicate the identified patterns and trends.</li>
-</ul></li>
-<li><p><strong>Recommendations for Sustainable Development:</strong></p>
-<ul>
-<li>Actionable insights and recommendations for policymakers, environmental planners, and stakeholders based on the analysis, facilitating evidence-based decision-making for sustainable development.</li>
-</ul></li>
-<li><p><strong>Implications for Agricultural Practices:</strong></p>
-<ul>
-<li>Considerations and implications for agricultural practices based on rainfall patterns, helping guide sustainable farming strategies.</li>
-</ul></li>
-<li><p><strong>Environmental Resilience Strategies:</strong></p>
-<ul>
-<li>Suggestions for environmental resilience strategies, considering the impact of rainfall on ecosystems, water resources, and potential mitigation measures.</li>
-</ul></li>
-<li><p><strong>Documentation of Methodology:</strong></p>
-<ul>
-<li>A detailed documentation of the methodology used in the analysis, including any assumptions, data cleaning procedures, and model choices.</li>
-</ul></li>
 </ol>
-<pre><code></code></pre>
 </section>
 <section id="conclusions" class="level1">
 <h1>Conclusions</h1>
-<ol type="1">
-<li><p><strong>Identification of Rainfall Patterns:</strong></p>
 <ul>
-<li>Clear identification of historical rainfall patterns in various districts, aiding in understanding the temporal distribution of rainfall.</li>
-</ul></li>
-<li><p><strong>Disparities in Rainfall Distribution:</strong></p>
-<ul>
-<li>Recognition of disparities in rainfall distribution among different districts, providing insights into areas that are more prone to excess or insufficient rainfall.</li>
-</ul></li>
-<li><p><strong>Correlation with Socio-Economic Variables:</strong></p>
-<ul>
-<li>Exploration of correlations between rainfall patterns and socio-economic variables, such as population density or economic activities, facilitating a comprehensive understanding of the local impact of rainfall.</li>
-</ul></li>
-<li><p><strong>Environmental Implications:</strong></p>
-<ul>
-<li>Assessment of the environmental implications of rainfall patterns, including potential effects on agriculture, ecosystems, and water resources.</li>
-</ul></li>
-<li><p><strong>Strategic Planning for Sustainable Development:</strong></p>
-<ul>
-<li>Provision of actionable insights for policymakers and environmental planners to inform strategic planning for sustainable development, ensuring that localities are better equipped to manage and adapt to varying rainfall conditions.</li>
-</ul></li>
-<li><p><strong>Mitigation Strategies for Environmental Challenges:</strong></p>
-<ul>
-<li>Guidance on the development of mitigation strategies for environmental challenges associated with rainfall, such as flooding, soil erosion, or water scarcity.</li>
-</ul></li>
-<li><p><strong>Targeted Interventions for Diverse Districts:</strong></p>
-<ul>
-<li>Tailored interventions for diverse districts based on their specific rainfall characteristics, allowing for more effective and region-specific initiatives.</li>
-</ul></li>
-<li><p><strong>Enhanced Resilience and Adaptation:</strong></p>
-<ul>
-<li>Contribution to evidence-based decision-making for enhancing resilience and adaptation strategies, particularly in districts facing environmental challenges influenced by rainfall variability.</li>
-</ul></li>
-<li><p><strong>Support for Sustainable Agriculture:</strong></p>
-<ul>
-<li>Insights to support sustainable agriculture practices, considering the impact of rainfall on crop growth and water availability.</li>
-</ul></li>
-<li><p><strong>Preparation for Extreme Events:</strong></p>
-<ul>
-<li>Consideration of extreme rainfall events and recommendations for preparedness measures to mitigate potential risks and damages.</li>
-</ul></li>
-</ol>
-</section>
-<section id="references" class="level1">
-<h1>References</h1>
-<ol type="1">
-<li><a href="httpa://www.ubos.org/explore-statistics/16/">Raw data</a></li>
-<li>Subramanya, K. (2009). Engineering Hydrology Ed.3. USA: MCGRAW-HILL.</li>
-</ol>
+<li><p>According to <a href="#fig-plot">Figure&nbsp;1</a>, Jinja and Apac districts receive extremely high amounts of rainfall in <strong>January</strong> as compared to the others. This calls for the responsible authorities assess the vulnerability of infrastructure and communities: Identify critical infrastructure, such as roads, bridges, and water systems, that are at risk during extreme rainfall events. Also, evaluate the socio-economic and demographic characteristics of the district’s population to understand their vulnerability to extreme rainfall events.</p></li>
+<li><p>According to , Kotido District receives the least amount of rainfall in the whole year, it is therefore important to emphasize the importance of water conservation and efficient irrigation techniques to ensure sustainable agricultural practices as backed by <span class="citation" data-cites="artcile2">(<a href="#ref-artcile2" role="doc-biblioref">Evans and Sadler 2008</a>)</span>.</p></li>
+<li><p>According to, Bulambuli District receives the highest amount of rainfall in the whole year, it is paramount to support the development of climate-resilient infrastructure, such as improved drainage systems and flood-control measures, to mitigate the impacts of extreme rainfall events.</p></li>
+<li><p>According to <a href="#tbl-cat">Table&nbsp;2</a>, Arua district receives consistently moderate rainfall between March to June and Lira District between March and May; this is suitable for agricultural purpose as extreme values of low or high rainfall amounts may cause crop failure according to a study by <span class="citation" data-cites="artcile3">(<a href="#ref-artcile3" role="doc-biblioref">Porter and Semenov 2005</a>)</span>.</p></li>
+</ul>
+
 </section>
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{otim2024,
-  author = {Otim, Haron},
-  title = {Rainfall {Dynamics} in {Uganda:} {A} {District-Level}
-    {Analysis} for 2021},
-  date = {2024-01-26},
-  url = {https://ds4owd-001.github.io/project-Otim-Haron/},
-  langid = {en},
-  abstract = {This project employs advanced data analysis to investigate
-    rainfall dynamics across different districts in Uganda for the year
-    2021. Focusing on distinct regions, the study aims to uncover
-    historical patterns, disparities, and correlations with
-    socio-economic and environmental variables. Utilizing the R
-    programming language, the project provides valuable insights for
-    policymakers, environmental planners, and researchers. The findings
-    contribute to evidence-based decision-making for sustainable
-    development and hold significance for addressing environmental
-    challenges and guiding strategic interventions in Uganda’s diverse
-    districts.}
-}
-</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-otim2024" class="csl-entry quarto-appendix-citeas" role="listitem">
-Otim, Haron. 2024. <span>“Rainfall Dynamics in Uganda: A District-Level
-Analysis for 2021.”</span> My Blog. January 26, 2024. <a href="https://ds4owd-001.github.io/project-Otim-Haron/">https://ds4owd-001.github.io/project-Otim-Haron/</a>.
-</div></div></section></div></main>
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-IanBurton2005" class="csl-entry" role="listitem">
+Burton, Ian, Elizabeth Malone, and Saleemul Huq. 2005. <em>Adaptation Policy Frameworks for Climate Change: Developing Strategies, Policies and Measures</em>. Cambridge University Press.
+</div>
+<div id="ref-artcile2" class="csl-entry" role="listitem">
+Evans, Robert G., and E. John Sadler. 2008. <span>“Methods and Technologies to Improve Efficiency of Water Use.”</span> <a href="https://onlinelibrary.wiley.com/doi/abs/10.1029/2007WR006200">https://onlinelibrary.wiley.com/doi/abs/10.1029/2007WR006200</a>.
+</div>
+<div id="ref-artcile3" class="csl-entry" role="listitem">
+Porter, John R, and Mikhail A Semenov. 2005. <span>“Crop Responses to Climatic Variation.”</span> <a href="https://doi.org/10.1098/rstb.2005.1752">https://doi.org/10.1098/rstb.2005.1752</a>.
+</div>
+</div></section></div></main>
 <!-- /main column -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {

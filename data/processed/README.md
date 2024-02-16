@@ -17,12 +17,12 @@
 
 - First name:
 - Surname:
-- ORCID iD
+- ORCID iD:
 - Email:
 
 etc.
 
-3.  Date of data collection (single date, range, approximate date):24th January 2024.
+3.  Date of data collection :24th January 2024.
 
 4.  Geographic location of data collection: Uganda
 

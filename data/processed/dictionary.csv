@@ -1,1 +1,4 @@
 variable_name,description
+Districts,The selected districts in Uganda for which rainfall values in 2021 were used.
+months,"The months of January to December, a time span for which the rainfall values were measured."
+rainfall_in_mm,The actual rainfall values as recorded in mm

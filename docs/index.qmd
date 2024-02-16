@@ -3,22 +3,27 @@ title: "Rainfall Dynamics in Uganda: A District-Level Analysis for 2021"
 date: today
 toc: true
 code-fold: true
-execute: 
+bibliography: references.bib
+execute:
   warning: false
 author:
   - name: Haron Otim
     orcid: 0009-0003-2730-950X
     email: haronotim001@gmail.com
-    affiliation: 
+    affiliation:
       - name: MAKERERE UNIVERSITY
         url: https://mak.ac.ug
-abstract: 
- This project employs advanced data analysis to investigate rainfall dynamics across different districts in Uganda for the year 2021. Focusing on distinct regions, the study aims to uncover historical patterns, disparities, and correlations with socio-economic and environmental variables. Utilizing the R programming language, the project provides valuable insights for policymakers, environmental planners, and researchers. The findings contribute to evidence-based decision-making for sustainable development and hold significance for addressing environmental challenges and guiding strategic interventions in Uganda's diverse districts.
-license: "CC BY"
-citation: 
-  container-title: My Blog
-  url: https://ds4owd-001.github.io/project-Otim-Haron/
-editor: visual
+abstract:
+  This project employs advanced data analysis to investigate rainfall dynamics across different districts in Uganda for the year 2021. Focusing on distinct regions, the study aims to uncover historical patterns, disparities, and correlations with socio-economic and environmental variables. Utilizing the R programming language, the project provides valuable insights for policymakers, environmental planners, and researchers. The findings contribute to evidence-based decision-making for sustainable development and hold significance for addressing environmental challenges and guiding strategic interventions in Uganda's diverse districts.
+output:
+  html_document:
+    toc: true
+    toc_depth: 2
+    number_sections: true
+    css: custom.css
+citation_package: natbib
+citation_minimal: true
+citation_style: author-year
 ---
 
 **Project Description**
@@ -41,7 +46,7 @@ The data for this study was acquired from the Uganda Beaureau of Statistics, spe
 
 It is important to note that the analysis conducted serves an academic purpose only.
 
-Understanding the nuances of rainfall distribution in different districts of Uganda is crucial for informed decision-making and sustainable development. This analysis, focused on distinct districts, aims to provide valuable insights into local precipitation patterns, environmental trends, and the impact of various factors on rainfall distribution. The outcomes of this study can guide policy interventions, infrastructure planning, and strategic decision-making to ensure balanced regional growth and address environmental challenges.
+Understanding the nuances of rainfall distribution in different districts of Uganda is crucial for informed decision-making and sustainable development as narrated by [@IanBurton2005]. This analysis, focused on distinct districts, aims to provide valuable insights into local precipitation patterns, environmental trends, and the impact of various factors on rainfall distribution. The outcomes of this study can guide policy interventions, infrastructure planning, and strategic decision-making to ensure balanced regional growth and address environmental challenges.
 
 The project employs statistical analysis, time series modeling, and data visualization techniques using the R programming language. This comprehensive approach integrates data from various sources, offering a holistic view of the factors influencing rainfall patterns in Uganda. The results aim to facilitate evidence-based decision-making for policymakers, researchers, and stakeholders involved in the sustainable development of the region.
 
@@ -53,11 +58,14 @@ library(palmerpenguins)
 library(janitor)
 library(ggthemes)
 library(ggplot2)
+library(readr)
+library(ggridges)
+library(magrittr)
 ```
 
 # Methods
 
-## *Data Import*
+## *Raw Data Import*
 
 ```{r}
 # Importing the selected data frame
@@ -70,7 +78,7 @@ Monthly_rainfall_for_selected_centres_in_mm_2021 <- read_excel("/cloud/project/d
 
 ## *Data cleaning*
 
-The district of Wakiso was mistakenly registered twice in the raw data. For the purpose of a more representative analysis, one of the obersvations was located to Apac District, my home District.
+The district of Wakiso was mistakenly registered twice in the raw data. For the purpose of a more representative analysis, one of the obersvations was allocated to Apac District, my home District.
 
 ```{r}
 Monthly_rainfall_for_selected_centres_in_mm_2021 <-   Monthly_rainfall_for_selected_centres_in_mm_2021 |> 
@@ -91,11 +99,21 @@ monthly_rainfall <- Monthly_rainfall_for_selected_centres_in_mm_2021 |>
                values_to = "rainfall_in_mm")
 ```
 
+## *Processed Analysis ready data*
+
+```{r}
+# storing analysis ready data as a .csv file
+write_csv(monthly_rainfall, "/cloud/project/data/processed/monthly_rainfall_processed.csv")
+```
+
 Monthly rainfall for selected districts of Lira, Arua and Jinja.
 
 ```{r}
 # monthly rainfall extracted for Arua, Lira and Jinja districts
-monthly_rainfall_arua_lira_and_Jinja <- monthly_rainfall |>
+library(readr)
+monthly_rainfall_processed <- read_csv("/cloud/project/data/processed/monthly_rainfall_processed.csv")
+
+monthly_rainfall_arua_lira_and_Jinja <- monthly_rainfall_processed |>
   filter(District %in% c("Arua", "Lira", "Jinja"))
 ```
 
@@ -117,51 +135,35 @@ monthly_rainfall_arua_lira_and_Jinja <- monthly_rainfall |>
 
 ## *Choices for graphs used in visualization*
 
-1.  **Time Series Plots:**
-
-    -   To depict the temporal variation of rainfall across districts over the course of the year, helping identify trends and patterns.
-
-2.  **Bar Charts:**
+1.  **Bar Charts:**
 
     -   For comparing total annual rainfall amounts or monthly variations among different districts, providing a clear visual comparison.
 
-3.  **Heatmaps:**
-
-    -   To represent spatial patterns of rainfall across districts, allowing for a quick overview of variations and hotspots.
-
-4.  **Box Plots:**
-
-    -   For displaying the distribution of rainfall values in each district, indicating variability, outliers, and central tendencies.
-
-5.  **Scatter Plots:**
-
-    -   To explore relationships between rainfall and other variables, such as population density or economic indicators, helping identify potential correlations.
-
-6.  **Pie Charts:**
-
-    -   To illustrate the proportion of districts experiencing different levels of rainfall, categorizing them into specific ranges.
-
-7.  **Geospatial Maps:**
-
-    -   To visualize the geographical distribution of rainfall across Uganda's districts, providing an intuitive representation of regional differences.
-
-8.  **Line Charts:**
-
-    -   For displaying trends in rainfall over time for specific districts, highlighting any notable patterns or anomalies.
-
-9.  **Area Charts:**
-
-    -   To show cumulative rainfall over time, offering insights into the overall trend and cumulative effects.
-
-10. **Radar Charts:**
-
-    -   For displaying multi-dimensional data, such as comparing rainfall, socio-economic, and environmental variables for each district simultaneously.
-
-## 
-
-```{r}
-
-```
+        ```{r}
+        monthly_rainfall_arua_lira_and_Jinja |>
+          ggplot(mapping = aes(x = fct_reorder(months, case_when(months == "Jan" ~ 1,
+                                                                 months == "Feb" ~ 2,
+                                                                 months == "Mar" ~ 3,
+                                                                 months == "Apr" ~ 4,
+                                                                 months == "May" ~ 5,
+                                                                 months == "Jun" ~ 6,
+                                                                 months == "Jul" ~ 7,
+                                                                 months == "Aug" ~ 8,
+                                                                 months == "Sep" ~ 9,
+                                                                 months == "Oct" ~ 10,
+                                                                 months == "Nov" ~ 11,                                                             months == "Dec" ~ 12)),
+                               y = rainfall_in_mm)) +
+          geom_col() +
+          facet_wrap(~District) +
+           labs(title = "Monthly Rainfall Across Districts in 2021",
+               x = "Month",
+               y = "Rainfall (mm)") +
+          theme_minimal() +
+          theme(axis.text.x = element_text(size = 8, angle = 90, hjust = 1),
+                strip.text = element_text(size = 10),
+                strip.background = element_blank(),
+                plot.title = element_text(size = 14, face = "bold"))
+        ```
 
 # Results
 
@@ -183,7 +185,6 @@ monthly_rainfall_arua_lira_and_Jinja <- monthly_rainfall |>
                 strip.text = element_text(size = 10),
                 strip.background = element_blank(),
                 plot.title = element_text(size = 14, face = "bold"))
-
         ```
 
 2.  **Total Annual Rainfall:**
@@ -193,6 +194,8 @@ monthly_rainfall_arua_lira_and_Jinja <- monthly_rainfall |>
         ```{r}
         #| label: tbl-tar
         #| tbl-cap: A table showing the total annual rainfall received in different districts in 2021
+        library(gt)
+
         total_annual_rainfall <- monthly_rainfall |>
           group_by(District) |> 
           summarize(total_annual_rainfall = sum(rainfall_in_mm))
@@ -200,6 +203,7 @@ monthly_rainfall_arua_lira_and_Jinja <- monthly_rainfall |>
           gt() |> 
           fmt_number(columns = c(total_annual_rainfall),
                      decimals = 1)
+
         ```
 
 3.  **Monthly Rainfall Variations:**
@@ -232,96 +236,12 @@ monthly_rainfall_arua_lira_and_Jinja <- monthly_rainfall |>
 
         ```
 
-4.  **Correlations with Socio-Economic Variables:**
-
-    -   Insights into correlations between rainfall patterns and socio-economic variables, such as population density or economic indicators.
-
-5.  **Identification of Hotspots:**
-
-    -   Recognition of districts experiencing extreme or anomalous rainfall conditions, if any.
-
-6.  **Spatial Mapping:**
-
-    -   Geospatial maps illustrating the geographical distribution of rainfall, highlighting regions with distinct patterns.
-
-7.  **Statistical Measures:**
-
-    -   Descriptive statistics for rainfall data, including measures of central tendency, dispersion, and any relevant statistical tests.
-
-8.  **Visualizations:**
-
-    -   Presentation of visualizations (time series plots, bar charts, heatmaps, etc.) to effectively communicate the identified patterns and trends.
-
-9.  **Recommendations for Sustainable Development:**
-
-    -   Actionable insights and recommendations for policymakers, environmental planners, and stakeholders based on the analysis, facilitating evidence-based decision-making for sustainable development.
-
-10. **Implications for Agricultural Practices:**
-
-    -   Considerations and implications for agricultural practices based on rainfall patterns, helping guide sustainable farming strategies.
-
-11. **Environmental Resilience Strategies:**
-
-    -   Suggestions for environmental resilience strategies, considering the impact of rainfall on ecosystems, water resources, and potential mitigation measures.
-
-12. **Documentation of Methodology:**
-
-    -   A detailed documentation of the methodology used in the analysis, including any assumptions, data cleaning procedures, and model choices.
-
-```         
-```
-
-```{r}
-
-```
-
 # Conclusions
 
-1.  **Identification of Rainfall Patterns:**
+-   According to [@fig-plot], Jinja and Apac districts receive extremely high amounts of rainfall in **January** as compared to the others. This calls for the responsible authorities assess the vulnerability of infrastructure and communities: Identify critical infrastructure, such as roads, bridges, and water systems, that are at risk during extreme rainfall events. Also, evaluate the socio-economic and demographic characteristics of the district's population to understand their vulnerability to extreme rainfall events.
 
-    -   Clear identification of historical rainfall patterns in various districts, aiding in understanding the temporal distribution of rainfall.
+-   According to , Kotido District receives the least amount of rainfall in the whole year, it is therefore important to emphasize the importance of water conservation and efficient irrigation techniques to ensure sustainable agricultural practices as backed by [@artcile2].
 
-2.  **Disparities in Rainfall Distribution:**
+-   According to, Bulambuli District receives the highest amount of rainfall in the whole year, it is paramount to support the development of climate-resilient infrastructure, such as improved drainage systems and flood-control measures, to mitigate the impacts of extreme rainfall events.
 
-    -   Recognition of disparities in rainfall distribution among different districts, providing insights into areas that are more prone to excess or insufficient rainfall.
-
-3.  **Correlation with Socio-Economic Variables:**
-
-    -   Exploration of correlations between rainfall patterns and socio-economic variables, such as population density or economic activities, facilitating a comprehensive understanding of the local impact of rainfall.
-
-4.  **Environmental Implications:**
-
-    -   Assessment of the environmental implications of rainfall patterns, including potential effects on agriculture, ecosystems, and water resources.
-
-5.  **Strategic Planning for Sustainable Development:**
-
-    -   Provision of actionable insights for policymakers and environmental planners to inform strategic planning for sustainable development, ensuring that localities are better equipped to manage and adapt to varying rainfall conditions.
-
-6.  **Mitigation Strategies for Environmental Challenges:**
-
-    -   Guidance on the development of mitigation strategies for environmental challenges associated with rainfall, such as flooding, soil erosion, or water scarcity.
-
-7.  **Targeted Interventions for Diverse Districts:**
-
-    -   Tailored interventions for diverse districts based on their specific rainfall characteristics, allowing for more effective and region-specific initiatives.
-
-8.  **Enhanced Resilience and Adaptation:**
-
-    -   Contribution to evidence-based decision-making for enhancing resilience and adaptation strategies, particularly in districts facing environmental challenges influenced by rainfall variability.
-
-9.  **Support for Sustainable Agriculture:**
-
-    -   Insights to support sustainable agriculture practices, considering the impact of rainfall on crop growth and water availability.
-
-10. **Preparation for Extreme Events:**
-
-    -   Consideration of extreme rainfall events and recommendations for preparedness measures to mitigate potential risks and damages.
-
-```{r}
-
-```
-
-# References
-
-1.  [Raw data](httpa://www.ubos.org/explore-statistics/16/)
-2.  Subramanya, K. (2009). Engineering Hydrology Ed.3. USA: MCGRAW-HILL.
+-   According to [@tbl-cat], Arua district receives consistently moderate rainfall between March to June and Lira District between March and May; this is suitable for agricultural purpose as extreme values of low or high rainfall amounts may cause crop failure according to a study by [@artcile3].
